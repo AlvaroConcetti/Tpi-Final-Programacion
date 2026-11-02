@@ -24,6 +24,15 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.Button btnAgregarArticulo;
 
         /// <summary>
+        /// btnCategoriasMarcas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCategoriasMarcas;
+
+        /// <summary>
         /// txtBoxFiltrar control.
         /// </summary>
         /// <remarks>
@@ -40,15 +49,6 @@ namespace CatalogoWEB
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnBorrarFiltro;
-
-        /// <summary>
-        /// chBoxFiltroAvanzado control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chBoxFiltroAvanzado;
 
         /// <summary>
         /// lblDdlFiltrar control.
@@ -85,42 +85,6 @@ namespace CatalogoWEB
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlCriterio;
-
-        /// <summary>
-        /// lblDdlMarca control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDdlMarca;
-
-        /// <summary>
-        /// ddlMarca control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMarca;
-
-        /// <summary>
-        /// lblDdlCategoria control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDdlCategoria;
-
-        /// <summary>
-        /// ddlCategoria control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCategoria;
 
         /// <summary>
         /// lblTxtBoxFiltrarAvanzado control.

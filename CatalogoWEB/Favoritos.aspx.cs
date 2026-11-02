@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -16,6 +17,7 @@ namespace CatalogoWEB
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Barrera de seguridad para que se vean favoritos sin login.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
                 lblParrafo.Text = "Inicie sesion para que pueda ver sus favoritos.";
@@ -25,6 +27,7 @@ namespace CatalogoWEB
             Usuario usuarioLogueado = (Usuario)Session["Usuario"];
             int idUsuarioLogueado = usuarioLogueado.Id;
 
+            // Cargar la lista de favoritos.
             if (!IsPostBack)
             {
                 List<Articulo> listaFavoritos = consultasCatalogo.ListarFavoritos(idUsuarioLogueado);
@@ -34,6 +37,7 @@ namespace CatalogoWEB
             }
         }
 
+        // Quitar de favoritos un articulo que esta dentro del repetidor.
         protected void repRepetidorFavoritos_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "QuitarFavorito")
@@ -48,6 +52,7 @@ namespace CatalogoWEB
             }
         }
 
+        // Boton para redireccion al detalle del articulo.
         protected void btnDetalle_Click(object sender, EventArgs e)
         {
             int articuloId = int.Parse(((Button)sender).CommandArgument);
@@ -66,6 +71,12 @@ namespace CatalogoWEB
                 repRepetidorFavoritos.DataSource = consultasCatalogo.ListarArticulo();
                 repRepetidorFavoritos.DataBind();
             }
+        }
+
+        // Redireccion al catalogo princiapal.
+        protected void btnFavoritoVolver_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Default.aspx", false);
         }
     }
 }

@@ -42,6 +42,15 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.TextBox txtBoxPrecio;
 
         /// <summary>
+        /// txtBoxStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBoxStock;
+
+        /// <summary>
         /// txtBoxNombre control.
         /// </summary>
         /// <remarks>
@@ -60,22 +69,22 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.TextBox txtBoxDescripcion;
 
         /// <summary>
-        /// ddlMarca control.
+        /// txtBoxMarca control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMarca;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxMarca;
 
         /// <summary>
-        /// ddlCategoria control.
+        /// txtBoxCategoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCategoria;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxCategoria;
 
         /// <summary>
         /// btnAceptar control.
@@ -94,15 +103,6 @@ namespace CatalogoWEB
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelar;
-
-        /// <summary>
-        /// btnEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEliminar;
 
         /// <summary>
         /// txtBoxCodigo control.

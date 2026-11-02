@@ -11,6 +11,7 @@ namespace CatalogoWEB
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			// Carga el error que tenga guardado en sesion.
 			if (Session["Error"] != null)
 			{
 				lblError.Text = Session["Error"].ToString();

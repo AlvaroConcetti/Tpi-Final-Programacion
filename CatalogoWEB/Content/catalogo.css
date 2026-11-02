@@ -19,6 +19,9 @@
     --danger-bg:      #fdf2f2;
     --danger-border:  #e5c5c5;
     --success:        #2a7d4f;
+    --info:           #2f6690;
+    --info-bg:        #eef5fa;
+    --info-border:    #bcdae8;
     --navbar-h:       62px;
     --radius-sm:      6px;
     --radius-md:      10px;
@@ -254,9 +257,10 @@ input[type="submit"].btn-ghost {
     text-decoration: none;
     line-height: 1.5;
 }
-.btn-ghost:hover {
+.btn-ghost:hover,
+input[type="submit"].btn-ghost:hover {
     color: var(--text-primary) !important;
-    background: var(--accent-light) !important;
+    background: var(--border-strong) !important;
 }
 
 .btn-danger-soft,
@@ -277,6 +281,33 @@ input[type="submit"].btn-danger-soft {
 .btn-danger-soft:hover {
     background: var(--danger-bg) !important;
     border-color: var(--danger) !important;
+}
+input[type="submit"].btn-danger-soft:disabled,
+input[type="submit"].btn-info-soft:disabled {
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+/* Esto lo hizo claude code: espejo celeste de .btn-danger-soft, para "Agregar al carrito" */
+.btn-info-soft,
+input[type="submit"].btn-info-soft {
+    background: transparent !important;
+    border: 1.5px solid var(--info-border) !important;
+    color: var(--info) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13.5px;
+    font-weight: 400;
+    padding: 0.44rem 1.05rem;
+    border-radius: var(--radius-sm);
+    transition: background 0.14s, border-color 0.14s, transform 0.14s;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1.5;
+}
+.btn-info-soft:hover {
+    background: var(--info-bg) !important;
+    border-color: var(--info) !important;
+    transform: translateY(-1px);
 }
 
 .btn-secondary,
@@ -417,6 +448,7 @@ input[type="submit"].btn-secondary {
     display: flex;
     flex-direction: column;
     flex: 1;
+    gap: 0.5rem;
 }
 .catalog-card-title {
     font-weight: 600;
@@ -747,4 +779,502 @@ span[style*="color:red"] {
 @media (max-width: 480px) {
     .page-title { font-size: 1.5rem; }
     .catalog-card img { height: 200px; }
+}
+
+/* ── STEPPER DE CANTIDAD (catálogo + carrito) ── */
+.catalog-card { position: relative; }
+
+.qty-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.25rem;
+    background: var(--surface-raised);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+}
+
+.qty-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1;
+    text-decoration: none;
+    transition: background 0.14s, border-color 0.14s;
+}
+.qty-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+}
+
+/* Esto lo hizo claude code: boton "+" bloqueado al llegar al stock disponible */
+.qty-btn--disabled,
+.qty-btn--disabled:hover {
+    background: var(--accent-light);
+    border-color: var(--border);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.qty-value {
+    min-width: 26px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Badge de cantidad sobre la imagen (vista carrito) */
+.qty-badge {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 2;
+    background: var(--text-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    box-shadow: var(--shadow-card);
+}
+
+.cart-subtotal {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+}
+
+/* Esto lo hizo claude code */
+.stock-info {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Esto lo hizo claude code: ahora que .catalog-card-body maneja el espaciado
+   con "gap", se anulan los margenes propios de cada elemento (incluidos los
+   inline) para que no se dupliquen los espacios, y se oculta el <br> suelto
+   que quedaba entre "Ver detalle" y el stepper de cantidad. */
+.catalog-card-body > p {
+    margin: 0 !important;
+}
+.catalog-card-body input[type="submit"] {
+    margin: 0 !important;
+}
+.catalog-card-body br {
+    display: none;
+}
+.catalog-card-body .qty-stepper {
+    margin-top: 0;
+}
+
+/* Esto lo hizo claude code: cards clickeables completas (Catalogo y Mi carrito) */
+.catalog-card--shop,
+.catalog-card--cart {
+    cursor: pointer;
+}
+/* En el catalogo el corazon de favoritos se corre a la izquierda porque
+   la esquina derecha la ocupa el contador de unidades en el carrito (.qty-badge) */
+.catalog-card--shop .fav-btn {
+    left: 0.6rem;
+    right: auto;
+}
+
+/* Esto lo hizo claude code: notificacion flotante al agregar un articulo al carrito */
+.toast-notification {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    background: var(--text-primary);
+    color: #fff;
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--shadow-hover);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2000;
+}
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.toast-notification i {
+    color: var(--success);
+}
+
+/* Esto lo hizo claude code: variante roja del toast, para alertas (ej. no se puede eliminar) */
+.toast-notification--error {
+    background: var(--danger);
+}
+.toast-notification--error i {
+    color: #fff;
+}
+
+/* Esto lo hizo claude code: fila de artículo con stock 0 en Administracion */
+.fila-sin-stock td {
+    color: var(--danger) !important;
+}
+
+/* Esto lo hizo claude code: filas de Marcas/Categorias en CategoriasMarcas.aspx */
+.admin-list-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.admin-list-row:last-child {
+    border-bottom: none;
+}
+.admin-list-row .form-control {
+    flex: 1;
+}
+
+/* Esto lo hizo claude code: modal de confirmacion (quitar articulo del carrito) */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(28, 27, 24, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 3000;
+}
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+.modal-box {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: var(--shadow-hover);
+    transform: translateY(10px);
+    transition: transform 0.2s ease;
+}
+.modal-overlay.show .modal-box {
+    transform: translateY(0);
+}
+.modal-text {
+    font-size: 15px;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+}
+.modal-actions {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+}
+
+/* Esto lo hizo claude code: sidebar de filtros del catalogo (categoria -> marcas) */
+.catalog-layout {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+.catalog-main {
+    flex: 1;
+    min-width: 0;
+}
+.filter-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    position: sticky;
+    top: calc(var(--navbar-h) + 1rem);
+    max-height: calc(100vh - var(--navbar-h) - 2rem);
+    overflow-y: auto;
+}
+.filter-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.filter-sidebar-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+.filter-group {
+    border-bottom: 1px solid var(--border);
+    padding: 0.4rem 0;
+}
+.filter-group:last-child {
+    border-bottom: none;
+}
+.filter-category-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+.filter-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.25rem 0;
+    flex: 1;
+    min-width: 0;
+}
+.filter-checkbox-label span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.filter-checkbox-label input[type="checkbox"] {
+    accent-color: var(--text-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.filter-checkbox-label--nested {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+.filter-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.filter-toggle i {
+    transition: transform 0.2s ease;
+}
+.filter-group.open .filter-toggle i {
+    transform: rotate(180deg);
+}
+.filter-subgroup {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+    padding-left: 1.5rem;
+}
+.filter-group.open .filter-subgroup {
+    max-height: 600px;
+}
+.filter-mobile-toggle {
+    display: none;
+}
+@media (max-width: 991px) {
+    .catalog-layout {
+        flex-direction: column;
+    }
+    .filter-sidebar {
+        width: 100%;
+        position: static;
+        max-height: none;
+        display: none;
+    }
+    .filter-sidebar.mobile-open {
+        display: block;
+    }
+    .filter-mobile-toggle {
+        display: inline-flex;
+    }
+}
+
+/* Pie del carrito: total + botón de compra */
+.cart-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+.cart-total {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ── TARJETAS DE PEDIDO (pestaña Ventas) ── */
+/* Esto lo hizo claude code */
+.order-card {
+    margin-bottom: 1rem;
+    padding: 1.1rem 1.25rem;
+}
+.order-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+.order-card-meta {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+.order-card-total {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--price-color);
+}
+.order-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 0.3rem 0;
+    color: var(--text-secondary);
+}
+.order-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ── BOTÓN FAVORITO SOBRE LA FOTO (catálogo + favoritos) ── */
+.fav-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 22px;
+    line-height: 1;
+    background: transparent;   /* sin circulo de fondo */
+    border: none;              /* sin borde alrededor del icono */
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0;                /* oculto con el mouse afuera */
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.fav-btn i { color: #e03131; }
+
+/* Hover sobre el producto: aparece solo el icono, sin fondo ni borde */
+.catalog-card:hover .fav-btn {
+    opacity: 1;
+}
+.fav-btn:hover { transform: scale(1.12); }
+
+/* Ya es favorito: siempre visible y marcado, sin importar el hover */
+.fav-btn.fav-btn--activo {
+    opacity: 1;
+}
+
+/* Esto lo hizo claude code: Dashboard del admin */
+.kpi-card {
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    height: 100%;
+}
+.kpi-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+}
+.kpi-value {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+.kpi-detail {
+    font-size: 12.5px;
+    color: var(--text-muted);
+}
+.kpi-card--alerta {
+    border-color: var(--danger-border);
+    background: var(--danger-bg);
+}
+.kpi-card--alerta .kpi-value {
+    color: var(--danger);
+}
+.dashboard-panel {
+    padding: 1.1rem 1.25rem;
+    height: 100%;
+}
+.dashboard-panel-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 0.9rem;
+    color: var(--text-primary);
+}
+.dashboard-chart-wrap {
+    position: relative;
+    height: 260px;
+}
+.dashboard-empty {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin: 0;
+    padding: 0.5rem 0;
+}
+.dashboard-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+}
+.dashboard-list-row:last-of-type {
+    border-bottom: none;
+}
+.dashboard-list-nombre {
+    color: var(--text-primary);
+}
+.dashboard-list-codigo {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.dashboard-stock {
+    color: var(--text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+}
+.dashboard-stock--cero {
+    color: var(--danger);
 }

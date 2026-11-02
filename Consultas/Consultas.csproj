@@ -46,7 +46,9 @@
     <Compile Include="AccesoDatos.cs" />
     <Compile Include="ConsultasArticulo.cs" />
     <Compile Include="ConsultasCatalogo.cs" />
+    <Compile Include="ConsultasDashboard.cs" />
     <Compile Include="ConsultasUsuario.cs" />
+    <Compile Include="ConsultasVenta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seguridad.cs" />
   </ItemGroup>

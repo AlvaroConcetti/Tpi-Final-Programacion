@@ -14,9 +14,15 @@ namespace CatalogoWEB
         protected void Page_Load(object sender, EventArgs e)
         {
             ArticuloSeleccionado = (Articulo)Session["ArticuloSeleccionado"];
+
+            // Modifica el texto del boton segun corresponda.
             if ((string)Session["Origen"] == "Favoritos.aspx")
             {
                 btnDetalleVolver.Text = "← Volver a favoritos";
+            }
+            else if((string)Session["Origen"] == "Carrito.aspx")
+            {
+                btnDetalleVolver.Text = "← Volver al carrito";
             }
             else
             {
@@ -24,15 +30,20 @@ namespace CatalogoWEB
             }
         }
 
+        // Boton de volver inteligente, depende de donde venga la peticion de detalle, vuelve a la misma pagina. 
         protected void btnDetalleVolver_Click(object sender, EventArgs e)
         {
             if ((string)Session["Origen"] == "Favoritos.aspx")
             {
                 Response.Redirect("Favoritos.aspx");
             }
+            else if ((string)Session["Origen"] == "Carrito.aspx")
+            {
+                Response.Redirect("Carrito.aspx");
+            }
             else
             {
-                Response.Redirect("Detalle.aspx");
+                Response.Redirect("Default.aspx");
             }
         }
     }

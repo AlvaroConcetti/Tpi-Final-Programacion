@@ -21,6 +21,7 @@ namespace CatalogoWEB
 
         }
 
+        // Validaciones en el back.
         protected void btnCrearCuenta_Click(object sender, EventArgs e)
         {
             try
@@ -55,7 +56,13 @@ namespace CatalogoWEB
 
                 if (consultas.VerificarEmailExiste(txtBoxEmail.Text))
                 {
-                    lblMensajeValidacion.Text = "El email ya esta registrado. Intente con otra.";
+                    lblMensajeValidacion.Text = "El email ya esta registrado. Intente con otro.";
+                    return;
+                }
+
+                if (Validacion.ValidarSeguridad(txtBoxContrasena.Text))
+                {
+                    lblMensajeValidacion.Text = "La contraseña debe tener minimo 1 mayúscula , 1 número y 6 caracteres.";
                     return;
                 }
 

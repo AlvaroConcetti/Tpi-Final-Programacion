@@ -70,6 +70,7 @@
     <Content Include="Administracion.aspx" />
     <Content Include="AgregarArticulo.aspx" />
     <Content Include="bdd-catalogoweb\Catalogo_Completo.sql" />
+    <Content Include="Carrito.aspx" />
     <Content Include="Content\catalogo.css" />
     <Content Include="Default.aspx" />
     <Content Include="Detalle.aspx" />
@@ -78,8 +79,24 @@
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="Registrarse.aspx" />
+    <Content Include="Ventas.aspx" />
+    <Content Include="bdd-catalogoweb\Stock_Pedidos.sql" />
+    <Content Include="bdd-catalogoweb\Migracion_MarcaCategoria.sql" />
+    <Content Include="bdd-catalogoweb\HistorialCategoriasTelefono.sql" />
+    <Content Include="Historial.aspx" />
+    <Content Include="CategoriasMarcas.aspx" />
+    <Content Include="PedidosCancelados.aspx" />
+    <Content Include="bdd-catalogoweb\PedidosCancelados.sql" />
+    <Content Include="Dashboard.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Administracion.aspx.cs">
       <DependentUpon>Administracion.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -93,6 +110,13 @@
     </Compile>
     <Compile Include="AgregarArticulo.aspx.designer.cs">
       <DependentUpon>AgregarArticulo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Carrito.aspx.cs">
+      <DependentUpon>Carrito.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Carrito.aspx.designer.cs">
+      <DependentUpon>Carrito.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -148,6 +172,34 @@
       <DependentUpon>Registrarse.aspx</DependentUpon>
     </Compile>
     <Compile Include="Validacion.cs" />
+    <Compile Include="Ventas.aspx.cs">
+      <DependentUpon>Ventas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Ventas.aspx.designer.cs">
+      <DependentUpon>Ventas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Historial.aspx.cs">
+      <DependentUpon>Historial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Historial.aspx.designer.cs">
+      <DependentUpon>Historial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CategoriasMarcas.aspx.cs">
+      <DependentUpon>CategoriasMarcas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CategoriasMarcas.aspx.designer.cs">
+      <DependentUpon>CategoriasMarcas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PedidosCancelados.aspx.cs">
+      <DependentUpon>PedidosCancelados.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PedidosCancelados.aspx.designer.cs">
+      <DependentUpon>PedidosCancelados.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Master.Master" />

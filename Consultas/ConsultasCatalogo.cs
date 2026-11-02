@@ -27,19 +27,14 @@ namespace Consultas
                     aux.Codigo = (string)datos.Lector["Codigo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Precio = (decimal)datos.Lector["Precio"];
+                    aux.Stock = (int)datos.Lector["Stock"];
+                    aux.Marca = (string)datos.Lector["Marca"];
+                    aux.Categoria = (string)datos.Lector["Categoria"];
 
                     if (!(datos.Lector["ImagenUrl"] is DBNull))
                         aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
 
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-
-                    aux.Marca = new Marca();
-                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marca"];
-
-                    aux.Categoria = new Categoria();
-                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
 
                     lista.Add(aux);
                 }
@@ -75,17 +70,13 @@ namespace Consultas
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
                     aux.Precio = (decimal)datos.Lector["Precio"];
+                    aux.Stock = (int)datos.Lector["Stock"];
+                    aux.Marca = (string)datos.Lector["Marca"];
+                    aux.Categoria = (string)datos.Lector["Categoria"];
 
                     if (!(datos.Lector["ImagenUrl"] is DBNull))
                         aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
 
-                    aux.Marca = new Marca();
-                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marca"];
-
-                    aux.Categoria = new Categoria();
-                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
 
                     articulos.Add(aux);
                 }
@@ -108,29 +99,29 @@ namespace Consultas
 
             try
             {
-                string consulta = "SELECT A.Id, A.Codigo, A.Nombre, A.Descripcion, A.ImagenUrl, A.Precio, M.Id AS IdMarca, M.Descripcion AS Marca, C.Id AS IdCategoria, C.Descripcion AS Categoria FROM ARTICULOS A INNER JOIN MARCAS M ON A.IdMarca = M.Id INNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id WHERE ";
+                string consulta = "SELECT A.Id, A.Codigo, A.Nombre, A.Descripcion, A.ImagenUrl, A.Precio, A.Stock, M.Descripcion AS Marca, C.Descripcion AS Categoria FROM ARTICULOS A INNER JOIN MARCAS M ON A.IdMarca = M.Id INNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id WHERE ";
 
                 switch (campo)
                 {
                     case "Código":
-                        consulta += "A.Codigo = '" + filtro + "'";
+                        consulta += "A.Codigo = @filtro";
+                        datos.setearParametro("@filtro", filtro);
                         break;
 
                     case "Precio":
-                        if (criterio == ">")
-                            consulta += "A.Precio > " + filtro;
-                        else if (criterio == "<")
-                            consulta += "A.Precio < " + filtro;
-                        else
-                            consulta += "A.Precio = " + filtro;
+                        string operador = criterio == ">" ? ">" : criterio == "<" ? "<" : "=";
+                        consulta += "A.Precio " + operador + " @filtro";
+                        datos.setearParametro("@filtro", decimal.Parse(filtro));
                         break;
 
                     case "Marca":
-                        consulta += "A.IdMarca = " + filtro;
+                        consulta += "M.Descripcion LIKE @filtro";
+                        datos.setearParametro("@filtro", "%" + filtro + "%");
                         break;
 
                     case "Categoría":
-                        consulta += "A.IdCategoria = " + filtro;
+                        consulta += "C.Descripcion LIKE @filtro";
+                        datos.setearParametro("@filtro", "%" + filtro + "%");
                         break;
                 }
 
@@ -144,19 +135,14 @@ namespace Consultas
                     aux.Codigo = (string)datos.Lector["Codigo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Precio = (decimal)datos.Lector["Precio"];
+                    aux.Stock = (int)datos.Lector["Stock"];
+                    aux.Marca = (string)datos.Lector["Marca"];
+                    aux.Categoria = (string)datos.Lector["Categoria"];
 
                     if (!(datos.Lector["ImagenUrl"] is DBNull))
                         aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
 
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-
-                    aux.Marca = new Marca();
-                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marca"];
-
-                    aux.Categoria = new Categoria();
-                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
 
                     lista.Add(aux);
                 }
@@ -172,6 +158,71 @@ namespace Consultas
                 datos.cerrarConexion();
             }
         }
+
+        public List<Articulo> ListarFavoritos(int idUser)
+        {
+            List<Articulo> lista = new List<Articulo>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("ListarFavoritosSP");
+                datos.setearParametro("@IdUser", idUser);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Articulo aux = new Articulo();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Codigo = (string)datos.Lector["Codigo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Precio = (decimal)datos.Lector["Precio"];
+                    aux.Stock = (int)datos.Lector["Stock"];
+                    aux.Marca = (string)datos.Lector["Marca"];
+                    aux.Categoria = (string)datos.Lector["Categoria"];
+
+                    if (!(datos.Lector["ImagenUrl"] is DBNull))
+                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void EliminarFavorito(int idUser, int idArticulo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("EliminarFavoritoSP");
+
+                datos.setearParametro("@IdUser", idUser);
+                datos.setearParametro("@IdArticulo", idArticulo);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<Marca> ListarMarcas()
         {
             List<Marca> lista = new List<Marca>();
@@ -216,76 +267,119 @@ namespace Consultas
             finally { datos.cerrarConexion(); }
         }
 
-        public List<Articulo> ListarFavoritos(int idUser)
+        // Devuelve false si ya existia una marca con esa Descripcion (no la agrega de nuevo)
+        public bool AgregarMarca(string descripcion)
         {
-            List<Articulo> lista = new List<Articulo>();
             AccesoDatos datos = new AccesoDatos();
-
             try
             {
-                datos.setearProcedimiento("ListarFavoritosSP");
-                datos.setearParametro("@IdUser", idUser);
+                datos.setearProcedimiento("AgregarMarcaSP");
+                datos.setearParametro("@descripcion", descripcion);
                 datos.ejecutarLectura();
 
-                while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
 
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
-
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-
-                    aux.Marca = new Marca();
-                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marca"];
-
-                    aux.Categoria = new Categoria();
-                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
-
-                    lista.Add(aux);
-                }
-
-                return lista;
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
         }
 
-        public void EliminarFavorito(int idUser, int idArticulo)
+        // Devuelve false si el nuevo nombre ya lo usa otra marca (no aplica el cambio)
+        public bool ModificarMarca(int id, string descripcion)
         {
             AccesoDatos datos = new AccesoDatos();
-
             try
             {
-                datos.setearProcedimiento("EliminarFavoritoSP");
+                datos.setearProcedimiento("ModificarMarcaSP");
+                datos.setearParametro("@id", id);
+                datos.setearParametro("@descripcion", descripcion);
+                datos.ejecutarLectura();
 
-                datos.setearParametro("@IdUser", idUser);
-                datos.setearParametro("@IdArticulo", idArticulo);
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
 
-                datos.ejecutarAccion();
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
         }
 
+        public bool EliminarMarca(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("EliminarMarcaSP");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
+
+                return false;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // Devuelve false si ya existia una categoria con esa Descripcion (no la agrega de nuevo)
+        public bool AgregarCategoria(string descripcion)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("AgregarCategoriaSP");
+                datos.setearParametro("@descripcion", descripcion);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
+
+                return false;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // Devuelve false si el nuevo nombre ya lo usa otra categoria (no aplica el cambio)
+        public bool ModificarCategoria(int id, string descripcion)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("ModificarCategoriaSP");
+                datos.setearParametro("@id", id);
+                datos.setearParametro("@descripcion", descripcion);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
+
+                return false;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public bool EliminarCategoria(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("EliminarCategoriaSP");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (bool)datos.Lector["Exito"];
+
+                return false;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
     }
 
 }

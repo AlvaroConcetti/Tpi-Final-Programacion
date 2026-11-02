@@ -20,6 +20,7 @@ namespace CatalogoWEB
 
         }
 
+        // Validaciones en el backend.
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
             try
@@ -53,9 +54,16 @@ namespace CatalogoWEB
                     return;
                 }
 
+                if (Validacion.VlidarMinLength(txtBoxContrasena.Text, 6))
+                {
+                    lblMensajeValidacion.Text = "Por favor, ingrese una contraseña con minimo 6 caracteres";
+                    return;
+                }
+
                 usuario.Email = txtBoxEmail.Text;
                 usuario.Contrasena = txtBoxContrasena.Text;
 
+                // Verifica que exista la cuenta / que los datos esten correctos.
                 if (Consultas.Login(usuario))
                 {
                     Session.Add("Usuario", usuario);

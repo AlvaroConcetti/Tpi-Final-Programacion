@@ -21,15 +21,15 @@ namespace Consultas
                 datos.setearParametro("@codigo", nuevo.Codigo);
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@descripcion", nuevo.Descripcion);
-                datos.setearParametro("@idMarca", nuevo.Marca.Id);
-                datos.setearParametro("@idCategoria", nuevo.Categoria.Id);
+                datos.setearParametro("@marca", nuevo.Marca);
+                datos.setearParametro("@categoria", nuevo.Categoria);
+                datos.setearParametro("@precio", nuevo.Precio);
+                datos.setearParametro("@stock", nuevo.Stock);
 
                 if (!string.IsNullOrEmpty(nuevo.UrlImagen))
                     datos.setearParametro("@imagenUrl", nuevo.UrlImagen);
                 else
                     datos.setearParametro("@imagenUrl", DBNull.Value);
-
-                datos.setearParametro("@precio", nuevo.Precio);
 
                 return datos.ejecutarAccionScalar();
             }
@@ -72,15 +72,16 @@ namespace Consultas
                 datos.setearParametro("@codigo", articuloModificado.Codigo);
                 datos.setearParametro("@nombre", articuloModificado.Nombre);
                 datos.setearParametro("@descripcion", articuloModificado.Descripcion);
-                datos.setearParametro("@idMarca", articuloModificado.Marca.Id);
-                datos.setearParametro("@idCategoria", articuloModificado.Categoria.Id);
+                datos.setearParametro("@marca", articuloModificado.Marca);
+                datos.setearParametro("@categoria", articuloModificado.Categoria);
+                datos.setearParametro("@precio", articuloModificado.Precio);
+                datos.setearParametro("@stock", articuloModificado.Stock);
 
                 if (!string.IsNullOrEmpty(articuloModificado.UrlImagen))
                     datos.setearParametro("@imagenUrl", articuloModificado.UrlImagen);
                 else
                     datos.setearParametro("@imagenUrl", DBNull.Value);
 
-                datos.setearParametro("@precio", articuloModificado.Precio);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

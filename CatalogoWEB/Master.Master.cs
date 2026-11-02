@@ -13,6 +13,7 @@ namespace CatalogoWEB
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Si esta la sesion activa muestra cerrar sesion, si no esta activa, muestra iniciar sesion.
             if (Seguridad.SesionActiva(Session["Usuario"]))
             {
                 btnCerrarSesion.Visible = true;
@@ -20,11 +21,13 @@ namespace CatalogoWEB
             }
         }
 
+        // Redireccion a login.
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             Response.Redirect("Login.aspx", false);
         }
 
+        // Cierra sesion, borra los datos en session y redireccion a catalogo principal.
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             Session.Clear();

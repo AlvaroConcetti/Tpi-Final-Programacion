@@ -19,6 +19,7 @@ namespace CatalogoWEB
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
             if (Seguridad.Admin(Session["Usuario"]) == false)
             {
                 Session.Add("Error", "No tienes permisos para ingresar aqui.");
@@ -26,42 +27,27 @@ namespace CatalogoWEB
             }
 
             txtBoxId.Enabled = false;
+
             if (!IsPostBack)
             {
-                try
-                {
-                    ddlMarca.DataSource = consultasCatalogo.ListarMarcas();
-                    ddlMarca.DataValueField = "Id";
-                    ddlMarca.DataTextField = "Descripcion";
-                    ddlMarca.DataBind();
-
-                    ddlCategoria.DataSource = consultasCatalogo.ListarCategorias();
-                    ddlCategoria.DataValueField = "Id";
-                    ddlCategoria.DataTextField = "Descripcion";
-                    ddlCategoria.DataBind();
-                }
-                catch (Exception ex)
-                {
-                    Session.Add("Error", ex);
-                    Response.Redirect("Error.aspx", false);
-                }
-
+                // Si la redireccion trajo un parametro "Id" por URL, entra y precarga los campos para editarlos.
                 if (Request.QueryString["Id"] != null)
                 {
                     btnAceptar.Text = "Editar";
-                    btnEliminar.Visible = true;
 
                     int idArticulo = int.Parse(Request.QueryString["id"]);
                     List<Articulo> articulos = consultasCatalogo.ListarArticulo();
                     Articulo articuloSeleccionado = articulos.Find(x => x.Id == idArticulo);
 
                     txtBoxId.Text = articuloSeleccionado.Id.ToString();
-                    txtBoxPrecio.Text = articuloSeleccionado.Precio.ToString();
+                    txtBoxPrecio.Text = articuloSeleccionado.Precio.ToString("N2");
+                    txtBoxStock.Text = articuloSeleccionado.Stock.ToString();
                     txtBoxNombre.Text = articuloSeleccionado.Nombre;
                     txtBoxDescripcion.Text = articuloSeleccionado.Descripcion;
-                    ddlMarca.SelectedValue = articuloSeleccionado.Marca.Id.ToString();
-                    ddlCategoria.SelectedValue = articuloSeleccionado.Categoria.Id.ToString();
+                    txtBoxMarca.Text = articuloSeleccionado.Marca;
+                    txtBoxCategoria.Text = articuloSeleccionado.Categoria;
                     txtBoxCodigo.Text = articuloSeleccionado.Codigo;
+                    
                     if (!string.IsNullOrWhiteSpace(articuloSeleccionado.UrlImagen))
                     {
                         imgArticulo.ImageUrl = articuloSeleccionado.UrlImagen;
@@ -71,7 +57,6 @@ namespace CatalogoWEB
                         imgArticulo.ImageUrl = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
                     }
                 }
-
             }
         }
 
@@ -79,12 +64,14 @@ namespace CatalogoWEB
         {
             try
             {
-                    Page.Validate();
-                    if (!Page.IsValid)
-                        return;
+                //Validacion para los RequiredFieldValidator.
+                Page.Validate();
+                if (!Page.IsValid)
+                    return;
 
                 Articulo articuloNuevo = new Articulo();
 
+                //Validacion en backend para el txtBox precio.
                 try
                 {
                     articuloNuevo.Precio = decimal.Parse(txtBoxPrecio.Text);
@@ -96,14 +83,31 @@ namespace CatalogoWEB
                     return;
                 }
 
+                //Validacion en backend para el txtBox stock.
+                try
+                {
+                    articuloNuevo.Stock = int.Parse(txtBoxStock.Text);
+                }
+                catch (Exception)
+                {
+                    Session.Add("Error", "El stock tiene un formato inválido.");
+                    Response.Redirect("Error.aspx", false);
+                    return;
+                }
+
                 articuloNuevo.Nombre = txtBoxNombre.Text;
                 articuloNuevo.Descripcion = txtBoxDescripcion.Text;
-                articuloNuevo.Marca = new Marca();
-                articuloNuevo.Marca.Id = int.Parse(ddlMarca.SelectedValue);
-                articuloNuevo.Categoria = new Categoria();
-                articuloNuevo.Categoria.Id = int.Parse(ddlCategoria.SelectedValue);
+                articuloNuevo.Marca = txtBoxMarca.Text;
+                articuloNuevo.Categoria = txtBoxCategoria.Text;
                 articuloNuevo.Codigo = txtBoxCodigo.Text;
 
+                Articulo articuloExistente = null;
+                if (Request.QueryString["Id"] != null)
+                {
+                    int idArticulo = int.Parse(Request.QueryString["Id"]);
+                    List<Articulo> articulos = consultasCatalogo.ListarArticulo();
+                    articuloExistente = articulos.Find(x => x.Id == idArticulo);
+                }
                 if (txtImagen.PostedFile != null && txtImagen.PostedFile.ContentLength > 0)
                 {
                     string ruta = Server.MapPath("./Images/");
@@ -111,11 +115,18 @@ namespace CatalogoWEB
                     txtImagen.PostedFile.SaveAs(ruta + nombreArchivo);
                     articuloNuevo.UrlImagen = "Images/" + nombreArchivo;
                 }
+                else if (articuloExistente != null)
+                {
+                    // Editando no subieron nada nuevo -> conservar la que ya estaba.
+                    articuloNuevo.UrlImagen = articuloExistente.UrlImagen;
+                }
                 else
                 {
+                    // Alta nueva sin imagen.
                     articuloNuevo.UrlImagen = string.Empty;
                 }
 
+                // Si se esta editando se llama al metodo modificar, sino al agregar.
                 if (Request.QueryString["Id"] != null)
                 {
                     articuloNuevo.Id = int.Parse(Request.QueryString["Id"]);
@@ -126,64 +137,38 @@ namespace CatalogoWEB
                     consultasArticulo.AgregarArticulo(articuloNuevo);
                 }
 
-                Response.Redirect("Administracion.aspx", false);
+                RedirectAAdministracion();
             }
             catch (Exception ex)
             {
                 Session.Add("Error", ex);
                 Response.Redirect("Error.aspx", false);
             }
-
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Administracion.aspx", false);
+            RedirectAAdministracion();
         }
 
-        //protected void btnEliminar_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-
-        //        int idArticulo = int.Parse(Request.QueryString["id"]);
-        //        consultasArticulo.EliminarArticulo(idArticulo);
-        //        Response.Redirect("Administracion.aspx", false);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Session.Add("Error", ex);
-        //        Response.Redirect("Error.aspx", false);
-        //    }
-        //}
-
-        // Lo hice con claude code para poder borrar las imagenes de la carpeta Images.
-        protected void btnEliminar_Click(object sender, EventArgs e)
+        // Metodo privado para que si tengo que modificar el querystring lo hago aca y se modifica en los 2 (o mas en un futuro) lados que lo tengo.
+        private void RedirectAAdministracion()
         {
-            try
+            if (!string.IsNullOrEmpty(Request.QueryString["Buscar"]))
             {
-                int idArticulo = int.Parse(Request.QueryString["id"]);
-                List<Articulo> lista = consultasCatalogo.ListarArticulo();
-                Articulo articuloABorrar = lista.Find(x => x.Id == idArticulo);
+                string filtro = Request.QueryString["Filtro"];
+                string criterio = Request.QueryString["Criterio"];
+                string buscar = Request.QueryString["Buscar"];
 
-                if (articuloABorrar != null && !string.IsNullOrEmpty(articuloABorrar.UrlImagen))
-                {
-                    string rutaFisica = Server.MapPath("~/" + articuloABorrar.UrlImagen);
-
-                    if (System.IO.File.Exists(rutaFisica))
-                    {
-                        System.IO.File.Delete(rutaFisica);
-                    }
-                }
-
-                consultasArticulo.EliminarArticulo(idArticulo);
-                Response.Redirect("Administracion.aspx", false);
+                Response.Redirect("Administracion.aspx?Filtro=" + Server.UrlEncode(filtro)
+                    + "&Criterio=" + Server.UrlEncode(criterio)
+                    + "&Buscar=" + Server.UrlEncode(buscar), false);
             }
-            catch (Exception ex)
+            else
             {
-                Session.Add("Error", ex);
-                Response.Redirect("Error.aspx", false);
+                Response.Redirect("Administracion.aspx", false);
             }
         }
     }
+
 }

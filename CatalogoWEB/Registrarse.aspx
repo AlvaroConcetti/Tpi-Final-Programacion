@@ -7,9 +7,11 @@
     <div class="auth-wrapper">
         <div class="auth-card">
 
+            <!-- Encabezados -->
             <h2 class="auth-title">Crear cuenta</h2>
             <p class="auth-sub">Completá tus datos para registrarte</p>
 
+            <!-- TextBox de correo electronico con sus validaciones en el front -->
             <div class="mb-3">
                 <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" />
                 <asp:TextBox runat="server" ID="txtBoxEmail" CssClass="form-control"
@@ -24,6 +26,7 @@
                     ValidationExpression="^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" />
             </div>
 
+            <!-- TextBox de contrasena con sus validaciones en el front -->
             <div class="mb-3">
                 <asp:Label runat="server" CssClass="form-label" Text="Contraseña" />
                 <asp:TextBox runat="server" ID="txtBoxContrasena" CssClass="form-control"
@@ -33,6 +36,7 @@
                     runat="server" CssClass="validation-error" />
             </div>
 
+            <!-- TextBox de confrimar contrasena con sus validaciones en el front -->
             <div class="mb-4">
                 <asp:Label runat="server" CssClass="form-label" Text="Confirmá tu contraseña" />
                 <asp:TextBox runat="server" ID="txtBoxconfirmarContrasena" CssClass="form-control"
@@ -42,6 +46,7 @@
                     runat="server" CssClass="validation-error" />
             </div>
 
+            <!-- Boton de crear cuenta -->
             <asp:Button ID="btnCrearCuenta" runat="server" Text="Crear cuenta"
                 CssClass="btn-primary" OnClick="btnCrearCuenta_Click"
                 Style="width: 100%; padding: 0.6rem;" />

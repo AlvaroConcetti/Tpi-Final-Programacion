@@ -7,9 +7,11 @@
     <div class="auth-wrapper">
         <div class="auth-card">
 
+            <!-- Encabezados -->
             <h2 class="auth-title">Bienvenido</h2>
             <p class="auth-sub">Iniciá sesión para continuar</p>
 
+            <!-- TextBox de correo electronico con sus validaciones en el front -->
             <div class="mb-3">
                 <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" />
                 <asp:TextBox runat="server" ID="txtBoxEmail" CssClass="form-control"
@@ -26,6 +28,7 @@
                     runat="server" CssClass="validation-error" />
             </div>
 
+            <!-- TextBox de contrasena con sus validaciones en el front -->
             <div class="mb-4">
                 <asp:Label runat="server" CssClass="form-label" Text="Contraseña" />
                 <asp:TextBox runat="server" ID="txtBoxContrasena" CssClass="form-control"
@@ -36,6 +39,7 @@
                     ControlToValidate="txtBoxContrasena" runat="server" CssClass="validation-error" />
             </div>
 
+            <!-- Boton de ingresar -->
             <asp:Button ID="btnIngresar" runat="server" Text="Ingresar"
                 CssClass="btn-primary" OnClick="btnIngresar_Click"
                 style="width:100%; padding:0.6rem;" />
