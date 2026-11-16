@@ -14,7 +14,6 @@
             OnClick="btnVolverAdmin_Click" CssClass="btn-ghost" CausesValidation="false" />
     </div>
 
-    <!-- Esto lo hizo claude code -->
     <!-- Alerta cuando se intenta eliminar una marca/categoria que todavia esta en uso -->
     <div id="toastAlerta" class="toast-notification toast-notification--error">
         <i class="bi bi-exclamation-triangle-fill me-1"></i>
@@ -33,7 +32,6 @@
         }
     </script>
 
-    <!-- Esto lo hizo claude code -->
     <!-- Notificacion pasiva al guardar la edicion de una marca o categoria -->
     <div id="toastCarrito" class="toast-notification">
         <i class="bi bi-check-circle-fill me-1"></i>
@@ -102,7 +100,6 @@
 
             </div>
 
-            <!-- Esto lo hizo claude code -->
             <!-- Soporte del modal de confirmacion: el tipo (0=marca, 1=categoria) decide que boton oculto disparar -->
             <asp:HiddenField ID="hdnIdMarcaAEliminar" runat="server" />
             <asp:Button ID="btnEliminarMarcaOculto" runat="server" OnClick="btnEliminarMarcaOculto_Click" Style="display: none;" CausesValidation="false" />

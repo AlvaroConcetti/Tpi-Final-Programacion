@@ -27,9 +27,41 @@ namespace CatalogoWEB
 
             if (!IsPostBack)
 			{
+				ActualizarArticulosDelCarrito();
 				CargarCarrito();
 			}
 		}
+
+        // Los articulos del carrito quedan guardados en Session desde que se agregaron, y mientras
+        // tanto el admin pudo cambiar el precio o el stock (o borrar el articulo). Por eso al entrar
+        // al carrito los volvemos a traer de la base y ajustamos las cantidades.
+        private void ActualizarArticulosDelCarrito()
+        {
+            List<ItemCarrito> carrito = Session["CarritoEnSession"] as List<ItemCarrito>;
+            if (carrito == null)
+                return;
+
+            ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
+            List<Articulo> articulosActuales = consultasCatalogo.ListarArticulo();
+
+            foreach (ItemCarrito item in carrito.ToList())
+            {
+                Articulo actual = articulosActuales.Find(x => x.Id == item.Articulo.Id);
+
+                if (actual == null || actual.Stock == 0)
+                {
+                    carrito.Remove(item);
+                }
+                else
+                {
+                    item.Articulo = actual;
+                    if (item.Cantidad > actual.Stock)
+                        item.Cantidad = actual.Stock;
+                }
+            }
+
+            Session.Add("CarritoEnSession", carrito);
+        }
 
         // Bindea el carrito (List<ItemCarrito>) y actualiza el total
         private void CargarCarrito()
@@ -58,11 +90,19 @@ namespace CatalogoWEB
         // Boton de detalle que manda su origen para poder volver al carrito y que no vuelva a catalogo.
         protected void btnDetalle_Click(object sender, EventArgs e)
         {
-            List<Articulo> buscarArticulos = (List<Articulo>)Session["ListaEnSession"];
+            // Lo buscamos en el carrito (antes se buscaba en la lista del catalogo, que no
+            // siempre esta cargada en Session y tiraba error).
+            List<ItemCarrito> carrito = Session["CarritoEnSession"] as List<ItemCarrito> ?? new List<ItemCarrito>();
             int articuloId = int.Parse(((Button)sender).CommandArgument);
-            Articulo seleccionado = buscarArticulos.Find(x => x.Id == articuloId);
+            ItemCarrito item = carrito.Find(x => x.Articulo.Id == articuloId);
 
-            Session.Add("ArticuloSeleccionado", seleccionado);
+            if (item == null)
+            {
+                CargarCarrito();
+                return;
+            }
+
+            Session.Add("ArticuloSeleccionado", item.Articulo);
             Session.Add("Origen", "Carrito.aspx");
             Response.Redirect("Detalle.aspx", false);
         }
@@ -79,7 +119,6 @@ namespace CatalogoWEB
             Response.Redirect("Historial.aspx", false);
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnMasCantidad_Click(object sender, EventArgs e)
         {
             try
@@ -152,7 +191,6 @@ namespace CatalogoWEB
             CargarCarrito();
         }
 
-        // Esto lo hizo claude code ↓.
         // Crea el Pedido pendiente con su detalle, vacia el carrito y deriva a WhatsApp
         protected void btnIniciarCompra_Click(object sender, EventArgs e)
         {
@@ -185,11 +223,22 @@ namespace CatalogoWEB
                 mensaje.AppendLine("Hola! Quiero confirmar mi pedido #" + idPedido + ":");
 
                 decimal total = 0;
-                foreach (ItemCarrito item in carrito)
+                try
                 {
-                    consultasVenta.AgregarDetallePedido(idPedido, item.Articulo.Id, item.Cantidad, item.Articulo.Precio);
-                    mensaje.AppendLine("- " + item.Articulo.Nombre + " x" + item.Cantidad + " ($" + item.Subtotal.ToString("N2") + ")");
-                    total += item.Subtotal;
+                    foreach (ItemCarrito item in carrito)
+                    {
+                        consultasVenta.AgregarDetallePedido(idPedido, item.Articulo.Id, item.Cantidad, item.Articulo.Precio);
+                        mensaje.AppendLine("- " + item.Articulo.Nombre + " x" + item.Cantidad + " ($" + item.Subtotal.ToString("N2") + ")");
+                        total += item.Subtotal;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Si fallo algun detalle borramos el pedido, para que no quede un pedido a medias.
+                    // (EliminarPedidoDefinitivoSP solo borra pedidos cancelados, por eso primero se cancela).
+                    consultasVenta.CancelarPedido(idPedido);
+                    consultasVenta.EliminarPedidoDefinitivo(idPedido);
+                    throw;
                 }
                 mensaje.AppendLine("Total: $" + total.ToString("N2"));
 

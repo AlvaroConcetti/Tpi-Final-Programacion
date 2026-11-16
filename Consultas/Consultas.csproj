@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -49,11 +49,12 @@
     <Compile Include="ConsultasDashboard.cs" />
     <Compile Include="ConsultasUsuario.cs" />
     <Compile Include="ConsultasVenta.cs" />
+    <Compile Include="HashContrasena.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seguridad.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\C# NIVEL 3\TP-CatalogoWEB\Dominio\Dominio.csproj">
+    <ProjectReference Include="..\Dominio\Dominio.csproj">
       <Project>{0840acaf-5dce-454c-9da6-05d2b0aab8e1}</Project>
       <Name>Dominio</Name>
     </ProjectReference>

@@ -51,6 +51,11 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.Button btnBorrarFiltro;
 
         /// <summary>
+        /// ddlOrden control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.DropDownList ddlOrden;
+
+        /// <summary>
         /// repRepetidor control.
         /// </summary>
         /// <remarks>

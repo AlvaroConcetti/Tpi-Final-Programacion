@@ -1,19 +1,35 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dominio;
 
 namespace Consultas
 {
     public class ConsultasCatalogo
     {
-        AccesoDatos datos = new AccesoDatos();
+        // Arma un Articulo con la fila actual del lector.
+        // Lo usan todos los metodos que traen articulos, asi no se repite el mismo codigo 4 veces.
+        private Articulo LeerArticulo(AccesoDatos datos)
+        {
+            Articulo aux = new Articulo();
+            aux.Id = (int)datos.Lector["Id"];
+            aux.Codigo = (string)datos.Lector["Codigo"];
+            aux.Nombre = (string)datos.Lector["Nombre"];
+            aux.Descripcion = (string)datos.Lector["Descripcion"];
+            aux.Precio = (decimal)datos.Lector["Precio"];
+            aux.Stock = (int)datos.Lector["Stock"];
+            aux.Marca = (string)datos.Lector["Marca"];
+            aux.Categoria = (string)datos.Lector["Categoria"];
+
+            if (!(datos.Lector["ImagenUrl"] is DBNull))
+                aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
+
+            return aux;
+        }
+
         public List<Articulo> ListarArticulo()
         {
             List<Articulo> lista = new List<Articulo>();
+            AccesoDatos datos = new AccesoDatos();
 
             try
             {
@@ -21,29 +37,9 @@ namespace Consultas
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-                    aux.Stock = (int)datos.Lector["Stock"];
-                    aux.Marca = (string)datos.Lector["Marca"];
-                    aux.Categoria = (string)datos.Lector["Categoria"];
-
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
-
-
-                    lista.Add(aux);
-                }
+                    lista.Add(LeerArticulo(datos));
 
                 return lista;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
             finally
             {
@@ -53,7 +49,8 @@ namespace Consultas
 
         public List<Articulo> FiltrarArticulo(string busqueda)
         {
-            List<Articulo> articulos = new List<Articulo>();
+            List<Articulo> lista = new List<Articulo>();
+            AccesoDatos datos = new AccesoDatos();
 
             try
             {
@@ -62,29 +59,9 @@ namespace Consultas
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
+                    lista.Add(LeerArticulo(datos));
 
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-                    aux.Stock = (int)datos.Lector["Stock"];
-                    aux.Marca = (string)datos.Lector["Marca"];
-                    aux.Categoria = (string)datos.Lector["Categoria"];
-
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
-
-
-                    articulos.Add(aux);
-                }
-                return articulos;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return lista;
             }
             finally
             {
@@ -109,9 +86,14 @@ namespace Consultas
                         break;
 
                     case "Precio":
+                        // Si escribieron algo que no es un numero devolvemos la lista vacia en vez de romper.
+                        decimal precio;
+                        if (!decimal.TryParse(filtro, out precio))
+                            return lista;
+
                         string operador = criterio == ">" ? ">" : criterio == "<" ? "<" : "=";
                         consulta += "A.Precio " + operador + " @filtro";
-                        datos.setearParametro("@filtro", decimal.Parse(filtro));
+                        datos.setearParametro("@filtro", precio);
                         break;
 
                     case "Marca":
@@ -123,35 +105,19 @@ namespace Consultas
                         consulta += "C.Descripcion LIKE @filtro";
                         datos.setearParametro("@filtro", "%" + filtro + "%");
                         break;
+
+                    default:
+                        // Campo desconocido: sin esto la consulta quedaba terminada en "WHERE " y fallaba.
+                        return lista;
                 }
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-                    aux.Stock = (int)datos.Lector["Stock"];
-                    aux.Marca = (string)datos.Lector["Marca"];
-                    aux.Categoria = (string)datos.Lector["Categoria"];
-
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
-
-
-                    lista.Add(aux);
-                }
+                    lista.Add(LeerArticulo(datos));
 
                 return lista;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
             finally
             {
@@ -171,28 +137,9 @@ namespace Consultas
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
-                {
-                    Articulo aux = new Articulo();
-                    aux.Id = (int)datos.Lector["Id"];
-                    aux.Codigo = (string)datos.Lector["Codigo"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    aux.Precio = (decimal)datos.Lector["Precio"];
-                    aux.Stock = (int)datos.Lector["Stock"];
-                    aux.Marca = (string)datos.Lector["Marca"];
-                    aux.Categoria = (string)datos.Lector["Categoria"];
-
-                    if (!(datos.Lector["ImagenUrl"] is DBNull))
-                        aux.UrlImagen = (string)datos.Lector["ImagenUrl"];
-
-                    lista.Add(aux);
-                }
+                    lista.Add(LeerArticulo(datos));
 
                 return lista;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
             finally
             {
@@ -213,10 +160,7 @@ namespace Consultas
 
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -241,7 +185,7 @@ namespace Consultas
                 }
                 return lista;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -263,7 +207,7 @@ namespace Consultas
                 }
                 return lista;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -282,7 +226,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -302,7 +246,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -320,7 +264,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -339,7 +283,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -359,7 +303,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
 
@@ -377,7 +321,7 @@ namespace Consultas
 
                 return false;
             }
-            catch (Exception ex) { throw ex; }
+
             finally { datos.cerrarConexion(); }
         }
     }

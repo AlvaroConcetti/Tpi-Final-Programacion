@@ -10,7 +10,6 @@ namespace CatalogoWEB
 {
     public static class Validacion
     {
-        // Esto lo hizo claude code
         // Formato internacional para WhatsApp: solo numeros, con codigo de pais, sin +/espacios/guiones
         public static bool ValidarTelefono(string texto)
         {
@@ -40,7 +39,7 @@ namespace CatalogoWEB
             return texto.Length > maximo;
         }
 
-        public static bool VlidarMinLength(string texto, int minimo)
+        public static bool ValidarMinLength(string texto, int minimo)
         {
             if (string.IsNullOrEmpty(texto)) return false;
             return texto.Length < minimo;

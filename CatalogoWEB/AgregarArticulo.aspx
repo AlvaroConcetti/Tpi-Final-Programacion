@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" CodeBehind="AgregarArticulo.aspx.cs" Inherits="CatalogoWEB.AgregarArticulo" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" CodeBehind="AgregarArticulo.aspx.cs" Inherits="CatalogoWEB.AgregarArticulo" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -84,7 +84,7 @@
                 <ContentTemplate>
                     <div class="mb-3">
                         <label class="form-label">Imagen del artículo</label>
-                        <input type="file" id="txtImagen" runat="server" class="form-control"
+                        <input type="file" id="txtImagen" runat="server" class="form-control" accept=".jpg,.jpeg,.png,.webp"
                             onchange="mostrarPreview(this)" style="font-size: 13px;" />
                     </div>
                     <div style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); background: var(--surface-raised);">
@@ -99,7 +99,6 @@
         </div>
     </div>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <script type="text/javascript">
         function mostrarPreview(input) {
             if (input.files && input.files[0]) {

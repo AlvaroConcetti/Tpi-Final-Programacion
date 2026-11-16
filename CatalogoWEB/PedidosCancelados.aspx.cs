@@ -1,4 +1,4 @@
-using Consultas;
+﻿using Consultas;
 using Dominio;
 using System;
 using System.Collections.Generic;
@@ -9,19 +9,12 @@ using System.Web.UI.WebControls;
 
 namespace CatalogoWEB
 {
-    public partial class PedidosCancelados : System.Web.UI.Page
+    public partial class PedidosCancelados : PaginaAdmin
     {
         ConsultasVenta consultasVenta = new ConsultasVenta();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que un usuario sin permisos no ingrese.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             if (!IsPostBack)
             {
                 CargarPedidos();

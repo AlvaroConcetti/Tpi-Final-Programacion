@@ -33,10 +33,7 @@ namespace Consultas
 
                 return datos.ejecutarAccionScalar();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -52,10 +49,7 @@ namespace Consultas
                 datos.setearParametro("@id", id);
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -84,10 +78,7 @@ namespace Consultas
 
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -106,10 +97,7 @@ namespace Consultas
 
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Consultas
 {
@@ -31,33 +27,39 @@ namespace Consultas
             comando.CommandText = consulta;
         }
 
+        public void setearProcedimiento(string sp)
+        {
+            comando.CommandType = System.Data.CommandType.StoredProcedure;
+            comando.CommandText = sp;
+        }
+
+        public void setearParametro(string nombre, object valor)
+        {
+            comando.Parameters.AddWithValue(nombre, valor);
+        }
+
+        // Los errores no se atrapan aca: suben solos hasta la pagina, que es la que decide
+        // que mostrar. (Antes habia catch con "throw ex;", que no hacia nada util y ademas
+        // perdia la linea donde habia ocurrido el error.)
         public void ejecutarLectura()
         {
             comando.Connection = conexion;
-            try
-            {
-                conexion.Open();
-                lector = comando.ExecuteReader();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            conexion.Open();
+            lector = comando.ExecuteReader();
         }
 
         public void ejecutarAccion()
         {
             comando.Connection = conexion;
-            try
-            {
-                conexion.Open();
-                comando.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+            conexion.Open();
+            comando.ExecuteNonQuery();
+        }
 
-                throw;
-            }
+        public int ejecutarAccionScalar()
+        {
+            comando.Connection = conexion;
+            conexion.Open();
+            return int.Parse(comando.ExecuteScalar().ToString());
         }
 
         public void cerrarConexion()
@@ -66,48 +68,5 @@ namespace Consultas
                 lector.Close();
             conexion.Close();
         }
-
-        public void setearProcedimiento(string sp)
-        {
-            try
-            {
-                comando.CommandType = System.Data.CommandType.StoredProcedure;
-                comando.CommandText = sp;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public int ejecutarAccionScalar()
-        {
-            comando.Connection = conexion;
-            try
-            {
-                conexion.Open();
-                return int.Parse(comando.ExecuteScalar().ToString());
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
-        public void setearParametro(string nombre, object valor)
-        {
-            try
-            {
-                comando.Parameters.AddWithValue(nombre, valor);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
     }
 }

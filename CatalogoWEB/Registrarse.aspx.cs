@@ -62,7 +62,7 @@ namespace CatalogoWEB
 
                 if (Validacion.ValidarSeguridad(txtBoxContrasena.Text))
                 {
-                    lblMensajeValidacion.Text = "La contraseña debe tener minimo 1 mayúscula , 1 número y 6 caracteres.";
+                    lblMensajeValidacion.Text = "La contraseña debe tener mínimo 6 caracteres, 1 mayúscula, 1 minúscula y 1 número.";
                     return;
                 }
 
@@ -81,8 +81,8 @@ namespace CatalogoWEB
             }
             catch (Exception ex)
             {
-                Session.Add("Error", ex.ToString());
-                Response.Redirect("Default.aspx", false);
+                Session.Add("Error", ex);
+                Response.Redirect("Error.aspx", false);
             }
         }
     }

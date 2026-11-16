@@ -288,7 +288,7 @@ input[type="submit"].btn-info-soft:disabled {
     cursor: not-allowed;
 }
 
-/* Esto lo hizo claude code: espejo celeste de .btn-danger-soft, para "Agregar al carrito" */
+/* Espejo celeste de .btn-danger-soft, para "Agregar al carrito" */
 .btn-info-soft,
 input[type="submit"].btn-info-soft {
     background: transparent !important;
@@ -818,7 +818,7 @@ span[style*="color:red"] {
     color: var(--text-primary);
 }
 
-/* Esto lo hizo claude code: boton "+" bloqueado al llegar al stock disponible */
+/* Boton "+" bloqueado al llegar al stock disponible */
 .qty-btn--disabled,
 .qty-btn--disabled:hover {
     background: var(--accent-light);
@@ -857,14 +857,13 @@ span[style*="color:red"] {
     margin: 0 0 0.75rem;
 }
 
-/* Esto lo hizo claude code */
 .stock-info {
     font-size: 13px;
     color: var(--text-secondary);
     margin: 0;
 }
 
-/* Esto lo hizo claude code: ahora que .catalog-card-body maneja el espaciado
+/* Ahora que .catalog-card-body maneja el espaciado
    con "gap", se anulan los margenes propios de cada elemento (incluidos los
    inline) para que no se dupliquen los espacios, y se oculta el <br> suelto
    que quedaba entre "Ver detalle" y el stepper de cantidad. */
@@ -881,7 +880,7 @@ span[style*="color:red"] {
     margin-top: 0;
 }
 
-/* Esto lo hizo claude code: cards clickeables completas (Catalogo y Mi carrito) */
+/* Cards clickeables completas (Catalogo y Mi carrito) */
 .catalog-card--shop,
 .catalog-card--cart {
     cursor: pointer;
@@ -893,7 +892,7 @@ span[style*="color:red"] {
     right: auto;
 }
 
-/* Esto lo hizo claude code: notificacion flotante al agregar un articulo al carrito */
+/* Notificacion flotante al agregar un articulo al carrito */
 .toast-notification {
     position: fixed;
     bottom: 1.5rem;
@@ -921,7 +920,7 @@ span[style*="color:red"] {
     color: var(--success);
 }
 
-/* Esto lo hizo claude code: variante roja del toast, para alertas (ej. no se puede eliminar) */
+/* Variante roja del toast, para alertas (ej. no se puede eliminar) */
 .toast-notification--error {
     background: var(--danger);
 }
@@ -929,12 +928,12 @@ span[style*="color:red"] {
     color: #fff;
 }
 
-/* Esto lo hizo claude code: fila de artículo con stock 0 en Administracion */
+/* Fila de artículo con stock 0 en Administracion */
 .fila-sin-stock td {
     color: var(--danger) !important;
 }
 
-/* Esto lo hizo claude code: filas de Marcas/Categorias en CategoriasMarcas.aspx */
+/* Filas de Marcas/Categorias en CategoriasMarcas.aspx */
 .admin-list-row {
     display: flex;
     align-items: center;
@@ -949,7 +948,7 @@ span[style*="color:red"] {
     flex: 1;
 }
 
-/* Esto lo hizo claude code: modal de confirmacion (quitar articulo del carrito) */
+/* Modal de confirmacion (quitar articulo del carrito) */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -990,7 +989,7 @@ span[style*="color:red"] {
     justify-content: flex-end;
 }
 
-/* Esto lo hizo claude code: sidebar de filtros del catalogo (categoria -> marcas) */
+/* Sidebar de filtros del catalogo (categoria -> marcas) */
 .catalog-layout {
     display: flex;
     gap: 1.5rem;
@@ -1126,7 +1125,6 @@ span[style*="color:red"] {
 }
 
 /* ── TARJETAS DE PEDIDO (pestaña Ventas) ── */
-/* Esto lo hizo claude code */
 .order-card {
     margin-bottom: 1rem;
     padding: 1.1rem 1.25rem;
@@ -1200,7 +1198,7 @@ span[style*="color:red"] {
     opacity: 1;
 }
 
-/* Esto lo hizo claude code: Dashboard del admin */
+/* Dashboard del admin */
 .kpi-card {
     padding: 1.1rem 1.25rem;
     display: flex;
@@ -1277,4 +1275,15 @@ span[style*="color:red"] {
 }
 .dashboard-stock--cero {
     color: var(--danger);
+}
+
+/* Aviso de stock bajo en Administracion */
+.aviso-stock {
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    color: var(--danger);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 14px;
 }

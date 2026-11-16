@@ -11,14 +11,12 @@
             <h1 class="page-title">Catálogo</h1>
             <p class="page-subtitle">Explorá todos los artículos disponibles</p>
         </div>
-        <!-- Esto lo hizo claude code ↓ -->
         <!-- Solo visible en mobile (ver media query), abre/cierra el sidebar de filtros -->
         <button type="button" class="btn-outline filter-mobile-toggle" onclick="toggleFilterSidebarMobile()">
             <i class="bi bi-funnel me-1"></i>Filtros
         </button>
     </div>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <!-- Sidebar de filtros: categorias y marcas derivadas de los articulos ya cargados -->
     <div class="catalog-layout">
         <aside class="filter-sidebar" id="filterSidebar">
@@ -32,8 +30,8 @@
                     <div class="filter-group">
                         <div class="filter-category-row">
                             <label class="filter-checkbox-label">
-                                <input type="checkbox" class="filtro-categoria" value='<%#Eval("Nombre")%>' onchange="aplicarFiltros()" />
-                                <span><%#Eval("Nombre")%></span>
+                                <input type="checkbox" class="filtro-categoria" value='<%#: Eval("Nombre") %>' onchange="aplicarFiltros()" />
+                                <span><%#: Eval("Nombre") %></span>
                             </label>
                             <asp:PlaceHolder runat="server" Visible='<%# ((FiltroCategoria)Container.DataItem).Marcas.Count > 0 %>'>
                                 <button type="button" class="filter-toggle" onclick="toggleCategoriaExpand(this)" aria-label="Desplegar marcas">
@@ -47,9 +45,9 @@
                                 <ItemTemplate>
                                     <label class="filter-checkbox-label filter-checkbox-label--nested">
                                         <input type="checkbox" class="filtro-marca"
-                                            data-categoria='<%#Eval("Categoria")%>' data-marca='<%#Eval("Nombre")%>'
+                                            data-categoria='<%#: Eval("Categoria") %>' data-marca='<%#: Eval("Nombre") %>'
                                             onchange="aplicarFiltros()" />
-                                        <span><%#Eval("Nombre")%></span>
+                                        <span><%#: Eval("Nombre") %></span>
                                     </label>
                                 </ItemTemplate>
                             </asp:Repeater>
@@ -65,9 +63,16 @@
                 <asp:TextBox ID="txtBoxFiltro" runat="server" CssClass="form-control" placeholder="Buscar artículos..." />
                 <asp:Button ID="btnBuscarFiltro" runat="server" Text="Buscar" OnClick="btnBuscarFiltro_Click" CssClass="btn-primary" />
                 <asp:Button ID="btnBorrarFiltro" runat="server" Text="Limpiar" OnClick="btnBorrarFiltro_Click" CssClass="btn-outline" />
+                <asp:DropDownList ID="ddlOrden" runat="server" CssClass="form-select" style="max-width: 210px;"
+                    AutoPostBack="true" OnSelectedIndexChanged="ddlOrden_SelectedIndexChanged">
+                    <asp:ListItem Value="" Text="Ordenar por..." />
+                    <asp:ListItem Value="PrecioAsc" Text="Precio: menor a mayor" />
+                    <asp:ListItem Value="PrecioDesc" Text="Precio: mayor a menor" />
+                    <asp:ListItem Value="NombreAsc" Text="Nombre: A - Z" />
+                    <asp:ListItem Value="NombreDesc" Text="Nombre: Z - A" />
+                </asp:DropDownList>
             </div>
 
-            <!-- Esto lo hizo claude code -->
             <!-- Notificacion flotante que se muestra al agregar un articulo al carrito -->
             <div id="toastCarrito" class="toast-notification">
                 <i class="bi bi-check-circle-fill me-1"></i>
@@ -93,16 +98,14 @@
                         <asp:Repeater runat="server" ID="repRepetidor">
                             <ItemTemplate>
                                 <div class="col">
-                                    <!-- Esto lo hizo claude code ↓ -->
                                     <!-- Toda la card es clickeable (salvo .no-card-click) y dispara el postback de btnDetalle -->
                                     <!-- data-categoria/data-marca: los usa el filtro del sidebar (JS) -->
                                     <div class="catalog-card h-100 catalog-card--shop"
-                                        data-categoria='<%#Eval("Categoria")%>' data-marca='<%#Eval("Marca")%>'
+                                        data-categoria='<%#: Eval("Categoria") %>' data-marca='<%#: Eval("Marca") %>'
                                         onclick="clickCard(event, this)">
 
-                                        <img src="<%#Eval("UrlImagen")%>" alt="<%#Eval("Nombre")%>" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%231a1f2e%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2214%22 fill=%22%23404e68%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
+                                        <img src="<%#: Eval("UrlImagen") %>" alt="<%#: Eval("Nombre") %>" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%231a1f2e%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2214%22 fill=%22%23404e68%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
 
-                                        <!-- Esto lo hizo claude code ↓ -->
                                         <!-- Boton favorito sobre la foto -->
                                         <asp:LinkButton ID="btnFavorito" runat="server" OnClick="btnFavorito_Click"
                                             CommandArgument='<%# Eval("Id") %>'
@@ -112,7 +115,7 @@
                                         </asp:LinkButton>
 
                                         <div class="catalog-card-body">
-                                            <p class="catalog-card-title"><%#Eval("Nombre")%></p>
+                                            <p class="catalog-card-title"><%#: Eval("Nombre") %></p>
                                             <p style="font-size: 14px; font-weight: 600; color: var(--price-color); margin: 0 0 0.2rem;">$<%#Eval("Precio", "{0:N2}")%></p>
                                             <p class="stock-info"><%# (int)Eval("Stock") > 0 ? "Stock: " + Eval("Stock") : "Sin stock" %></p>
 
@@ -134,7 +137,6 @@
                                                 Visible='<%# CantidadEnCarrito((int)Eval("Id")) == 0 && (int)Eval("Stock") > 0 %>'
                                                 Style="width: 100%; margin-top: 0.5rem;" />
 
-                                            <!-- Esto lo hizo claude code ↓ -->
                                             <!-- Cuando hay minimo 1 articulo en el carrito  -->
                                             <asp:Panel ID="pnlStepper" runat="server" CssClass="qty-stepper no-card-click"
                                                 Visible='<%# CantidadEnCarrito((int)Eval("Id")) > 0 %>'>
@@ -172,7 +174,6 @@
         </div>
     </div>
 
-    <!-- Esto lo hizo claude code -->
     <script type="text/javascript">
         // Filtro del sidebar: OR entre categorias tildadas, OR entre marcas tildadas
         // dentro de una misma categoria, AND entre categoria y sus marcas tildadas.

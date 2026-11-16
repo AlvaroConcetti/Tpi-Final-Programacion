@@ -17,7 +17,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Estilos del sitio -->
-    <link href="Content/catalogo.css?v=20" rel="stylesheet" />
+    <link href="Content/catalogo.css?v=21" rel="stylesheet" />
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -37,6 +37,12 @@
                 <a class="nav-link-item" href="Carrito.aspx">
                     <i class="bi bi-cart me-1"></i>Mi carrito
                 </a>
+                <%if (Consultas.Seguridad.SesionActiva(Session["Usuario"]))
+                    {%>
+                <a class="nav-link-item" href="Perfil.aspx">
+                    <i class="bi bi-person me-1"></i>Mi perfil
+                </a>
+                <%}%>
                 <!-- Para que aparezcan esos datos en el navbar debera ser admin -->
                 <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
                     {%>
@@ -58,7 +64,6 @@
                     CssClass="btn-ghost" Visible="false" OnClick="btnCerrarSesion_Click" CausesValidation="false" />
             </div>
 
-            <!-- Esto lo hizo claude code ↓ -->
             <!-- Botón hamburguesa: 3 barras que animan a X (visible sólo en ≤991px via CSS) -->
             <button class="nav-hamburger" id="btnHamburguesa" type="button" onclick="toggleMenu()" aria-label="Abrir menú">
                 <span class="ham-bar ham-bar--top"></span>
@@ -67,7 +72,6 @@
             </button>
         </nav>
 
-        <!-- Esto lo hizo claude code ↓ -->
         <!-- Menú mobile: visibilidad controlada por clase CSS .is-open -->
         <div class="nav-mobile-menu" id="navMobileMenu">
             <a class="nav-link-item" href="Default.aspx">
@@ -79,6 +83,12 @@
             <a class="nav-link-item" href="Carrito.aspx">
                 <i class="bi bi-cart me-1"></i>Mi carrito
             </a>
+            <%if (Consultas.Seguridad.SesionActiva(Session["Usuario"]))
+                {%>
+            <a class="nav-link-item" href="Perfil.aspx">
+                <i class="bi bi-person me-1"></i>Mi perfil
+            </a>
+            <%}%>
             <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
                 {%>
             <a class="nav-link-item" href="Administracion.aspx">
@@ -100,7 +110,6 @@
     </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
-    <!-- Esto lo hizo claude code ↓ -->
     <script>
         // Hace que toda la card sea clickeable (Catalogo y Mi carrito), salvo los
         // controles marcados con .no-card-click (botones, dropdown, corazon de favoritos).

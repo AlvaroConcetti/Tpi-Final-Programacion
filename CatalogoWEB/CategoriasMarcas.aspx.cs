@@ -1,4 +1,4 @@
-using Consultas;
+﻿using Consultas;
 using Dominio;
 using System;
 using System.Collections.Generic;
@@ -9,19 +9,12 @@ using System.Web.UI.WebControls;
 
 namespace CatalogoWEB
 {
-    public partial class CategoriasMarcas : System.Web.UI.Page
+    public partial class CategoriasMarcas : PaginaAdmin
     {
         ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             if (!IsPostBack)
             {
                 CargarListas();
@@ -100,7 +93,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void repMarcas_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             try
@@ -132,7 +124,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void repCategorias_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             try
@@ -164,7 +155,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnEliminarMarcaOculto_Click(object sender, EventArgs e)
         {
             try
@@ -185,7 +175,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnEliminarCategoriaOculto_Click(object sender, EventArgs e)
         {
             try

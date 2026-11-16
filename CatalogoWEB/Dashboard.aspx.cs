@@ -11,8 +11,7 @@ using Dominio;
 
 namespace CatalogoWEB
 {
-    // Esto lo hizo claude code ↓.
-    public partial class Dashboard : System.Web.UI.Page
+    public partial class Dashboard : PaginaAdmin
     {
         ConsultasDashboard consultasDashboard = new ConsultasDashboard();
 
@@ -24,18 +23,6 @@ namespace CatalogoWEB
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-                // Datos vacios para que el render de esta pagina no explote antes del redirect
-                Kpis = new KpisDashboard();
-                VentasPorDiaJson = "[]";
-                CategoriasJson = "[]";
-                TopArticulosJson = "[]";
-                return;
-            }
-
             CargarDatos();
         }
 

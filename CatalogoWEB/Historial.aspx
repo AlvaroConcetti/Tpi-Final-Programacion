@@ -34,7 +34,7 @@
                         <asp:Repeater runat="server" ID="repDetalle" DataSource='<%#Eval("Detalle")%>'>
                             <ItemTemplate>
                                 <div class="order-line">
-                                    <span><%#Eval("Articulo.Nombre")%> x<%#Eval("Cantidad")%></span>
+                                    <span><%#: Eval("Articulo.Nombre") %> x<%#Eval("Cantidad")%></span>
                                     <span>$<%#Eval("Subtotal", "{0:N2}")%></span>
                                 </div>
                             </ItemTemplate>

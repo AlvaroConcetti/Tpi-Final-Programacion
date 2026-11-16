@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -9,47 +10,140 @@ using Dominio;
 
 namespace CatalogoWEB
 {
-    public partial class Administracion : System.Web.UI.Page
+    public partial class Administracion : PaginaAdmin
     {
         ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
         ConsultasArticulo consultasArticulo = new ConsultasArticulo();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             ddlCriterio.Enabled = true;
 
             if (!IsPostBack)
             {
+                CargarAvisoStockBajo();
+
                 // Esto es para que no se actualice el filtro cuando se edita un articulo.
                 if (!(string.IsNullOrEmpty(Request.QueryString["Buscar"])))
                 {
-                    string filtro = Request.QueryString["Filtro"];
-                    string criterio = Request.QueryString["Criterio"];
-                    string buscar = Request.QueryString["Buscar"];
-
                     ddlFiltrar.SelectedValue = Request.QueryString["Filtro"].ToString();
                     ddlFiltrar_SelectedIndexChanged(null, EventArgs.Empty);
                     ddlCriterio.SelectedValue = Request.QueryString["Criterio"].ToString();
                     txtBoxFiltrarAvanzado.Text = Request.QueryString["Buscar"];
 
-                    dgvArticulos.DataSource = consultasCatalogo.FiltrarAvanzado(filtro, criterio, buscar);
-                    dgvArticulos.DataBind();
+                    CargarGrilla();
                 }
                 else
                 {
-                    dgvArticulos.DataSource = consultasCatalogo.ListarArticulo();
-                    dgvArticulos.DataBind();
-
                     ddlFiltrar_SelectedIndexChanged(null, EventArgs.Empty);
+                    CargarGrilla();
                 }
             }
+        }
+
+        // Muestra un aviso arriba de la grilla si hay articulos con 5 unidades o menos.
+        private void CargarAvisoStockBajo()
+        {
+            ConsultasDashboard consultasDashboard = new ConsultasDashboard();
+            List<Articulo> stockBajo = consultasDashboard.ArticulosStockBajo(5);
+
+            pnlStockBajo.Visible = stockBajo.Count > 0;
+            if (stockBajo.Count == 0)
+                return;
+
+            lblCantidadStockBajo.Text = stockBajo.Count == 1
+                ? "Hay 1 artículo con poco stock:"
+                : "Hay " + stockBajo.Count + " artículos con poco stock:";
+
+            // Mostramos hasta 5 nombres para que el aviso no quede gigante.
+            List<string> nombres = new List<string>();
+            foreach (Articulo articulo in stockBajo.Take(5))
+                nombres.Add(articulo.Nombre + " (" + articulo.Stock + ")");
+
+            string texto = string.Join(", ", nombres);
+            if (stockBajo.Count > 5)
+                texto += " y " + (stockBajo.Count - 5) + " más.";
+
+            lblArticulosStockBajo.Text = Server.HtmlEncode(texto);
+        }
+
+        // Carga la grilla respetando los filtros que esten escritos (el avanzado y el rapido por nombre).
+        // Antes al cambiar de pagina o borrar un filtro se cargaba la lista completa y se perdia el otro filtro.
+        private void CargarGrilla()
+        {
+            dgvArticulos.DataSource = ObtenerListaFiltrada();
+            dgvArticulos.DataBind();
+        }
+
+        // Devuelve los articulos aplicando los filtros escritos. La usa la grilla y tambien la exportacion.
+        private List<Articulo> ObtenerListaFiltrada()
+        {
+            List<Articulo> lista;
+
+            if (!string.IsNullOrEmpty(txtBoxFiltrarAvanzado.Text))
+            {
+                string campo = ddlFiltrar.SelectedItem.ToString();
+                string criterio = ddlCriterio.SelectedItem != null ? ddlCriterio.SelectedItem.ToString() : "";
+                lista = consultasCatalogo.FiltrarAvanzado(campo, criterio, txtBoxFiltrarAvanzado.Text);
+            }
+            else
+            {
+                lista = consultasCatalogo.ListarArticulo();
+            }
+
+            if (!string.IsNullOrEmpty(txtBoxFiltrar.Text))
+            {
+                lista = lista.FindAll(x => x.Nombre.ToUpper().Contains(txtBoxFiltrar.Text.ToUpper()));
+            }
+
+            return lista;
+        }
+
+        // Descarga los articulos (con los filtros que esten aplicados) en un CSV con el mismo
+        // formato que usa la importacion, asi se puede exportar, editar en Excel y volver a importar.
+        protected void btnExportarCsv_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Articulo> lista = ObtenerListaFiltrada();
+
+                StringBuilder csv = new StringBuilder();
+                csv.AppendLine("Codigo;Nombre;Descripcion;Marca;Categoria;Precio;Stock");
+
+                foreach (Articulo a in lista)
+                {
+                    csv.AppendLine(LimpiarCampo(a.Codigo) + ";" + LimpiarCampo(a.Nombre) + ";" + LimpiarCampo(a.Descripcion) + ";"
+                        + LimpiarCampo(a.Marca) + ";" + LimpiarCampo(a.Categoria) + ";"
+                        + a.Precio.ToString("0.##") + ";" + a.Stock);
+                }
+
+                string nombreArchivo = "articulos_" + DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
+
+                Response.Clear();
+                Response.ContentType = "text/csv";
+                Response.AddHeader("Content-Disposition", "attachment; filename=" + nombreArchivo);
+                // UTF-8 con BOM para que Excel muestre bien los acentos.
+                Response.ContentEncoding = Encoding.UTF8;
+                Response.BinaryWrite(Encoding.UTF8.GetPreamble());
+                Response.Write(csv.ToString());
+                Response.Flush();
+                Context.ApplicationInstance.CompleteRequest();
+                // Evita que despues se agregue el HTML de la pagina al archivo.
+                Response.SuppressContent = true;
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex);
+                Response.Redirect("Error.aspx", false);
+            }
+        }
+
+        // Saca los ";" y los saltos de linea de un texto, porque romperian las columnas del CSV.
+        private string LimpiarCampo(string texto)
+        {
+            if (texto == null)
+                return "";
+            return texto.Replace(";", ",").Replace("\r", " ").Replace("\n", " ").Trim();
         }
 
         // Cuando cambia de pagina el dgv, carga los articulos correspondientes.
@@ -58,8 +152,7 @@ namespace CatalogoWEB
             try
             {
                 dgvArticulos.PageIndex = e.NewPageIndex;
-                dgvArticulos.DataSource = consultasCatalogo.ListarArticulo();
-                dgvArticulos.DataBind();
+                CargarGrilla();
             }
             catch (Exception ex)
             {
@@ -72,6 +165,12 @@ namespace CatalogoWEB
         protected void btnAgregarArticulo_Click(object sender, EventArgs e)
         {
             Response.Redirect("AgregarArticulo.aspx", false);
+        }
+
+        // Redireccion para la importacion masiva de articulos por CSV.
+        protected void btnImportarCsv_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ImportarArticulos.aspx", false);
         }
 
         // Redireccion para administrar las marcas y categorias.
@@ -129,7 +228,6 @@ namespace CatalogoWEB
         }
 
         // Esto para poder tirar la alerta de stock bajo.
-        // Esto lo hizo claude code ↓.
         protected void dgvArticulos_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -156,9 +254,9 @@ namespace CatalogoWEB
 
         protected void btnBorrarFiltro_Click(object sender, EventArgs e)
         {
-            dgvArticulos.DataSource = Session["ListaEnSession"];
-            dgvArticulos.DataBind();
             txtBoxFiltrar.Text = "";
+            dgvArticulos.PageIndex = 0;
+            CargarGrilla();
         }
 
         // Para limpiar los filtros, se uso el redict para que se borren los datos de la querystring.
@@ -168,12 +266,20 @@ namespace CatalogoWEB
         }
 
         // Filtro rapido por nombre.
+        // (Antes usaba la lista guardada en Session por el catalogo, que podia no existir si el admin
+        // entraba directo aca. Ahora se trae de la base.)
         protected void txtBoxFiltrar_TextChanged(object sender, EventArgs e)
         {
-            List<Articulo> articulos = (List<Articulo>)Session["ListaEnSession"];
-            List<Articulo> listaFiltrada = articulos.FindAll(x => x.Nombre.ToUpper().Contains(txtBoxFiltrar.Text.ToUpper()));
-            dgvArticulos.DataSource = listaFiltrada;
-            dgvArticulos.DataBind();
+            try
+            {
+                dgvArticulos.PageIndex = 0;
+                CargarGrilla();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("Error", ex);
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
         // Esto es para el filtro avanzado.
@@ -220,30 +326,13 @@ namespace CatalogoWEB
         {
             try
             {
-                string campo = ddlFiltrar.SelectedItem.ToString();
-                string criterio = ddlCriterio.SelectedItem != null ? ddlCriterio.SelectedItem.ToString() : "";
-                string filtro = "";
-
-                if (campo == "Marca")
-                {
-                    filtro = txtBoxFiltrarAvanzado.Text;
-                }
-                else if (campo == "Categoría")
-                {
-                    filtro = txtBoxFiltrarAvanzado.Text;
-                }
-                else
-                {
-                    filtro = txtBoxFiltrarAvanzado.Text;
-                }
-
-                if (string.IsNullOrEmpty(filtro))
+                if (string.IsNullOrEmpty(txtBoxFiltrarAvanzado.Text))
                 {
                     return;
                 }
 
-                dgvArticulos.DataSource = consultasCatalogo.FiltrarAvanzado(campo, criterio, filtro);
-                dgvArticulos.DataBind();
+                dgvArticulos.PageIndex = 0;
+                CargarGrilla();
             }
             catch (Exception ex)
             {

@@ -12,7 +12,6 @@
         </div>
     </div>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <!-- Notificacion flotante que se muestra al agregar una unidad desde el "+" -->
     <div id="toastCarrito" class="toast-notification">
         <i class="bi bi-check-circle-fill me-1"></i>
@@ -38,7 +37,6 @@
             OnClick="btnVerHistorial_Click" CssClass="btn-outline" />
     </div>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
@@ -47,9 +45,9 @@
                         <div class="col">
                             <!-- Toda la card es clickeable (salvo .no-card-click) y dispara el postback de btnDetalle -->
                             <div class="catalog-card h-100 catalog-card--cart" onclick="clickCard(event, this)">
-                                <img src="<%#Eval("Articulo.UrlImagen")%>" alt="<%#Eval("Articulo.Nombre")%>" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%231a1f2e%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2214%22 fill=%22%23404e68%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
+                                <img src="<%#: Eval("Articulo.UrlImagen") %>" alt="<%#: Eval("Articulo.Nombre") %>" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%231a1f2e%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2214%22 fill=%22%23404e68%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
                                 <div class="catalog-card-body">
-                                    <p class="catalog-card-title"><%#Eval("Articulo.Nombre")%></p>
+                                    <p class="catalog-card-title"><%#: Eval("Articulo.Nombre") %></p>
                                     <p style="font-size: 14px; font-weight: 600; color: var(--price-color); margin: 0 0 0.2rem;">$<%#Eval("Articulo.Precio", "{0:N2}")%></p>
                                     <p class="stock-info">Stock disponible: <%#Eval("Articulo.Stock")%></p>
                                     <p class="cart-subtotal">Subtotal: $<%#Eval("Subtotal", "{0:N2}")%></p>
@@ -111,7 +109,6 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <!-- Modal de confirmacion para eliminar un articulo del carrito -->
     <div id="modalConfirmarQuitar" class="modal-overlay" onclick="cancelarQuitar()">
         <div class="modal-box" onclick="event.stopPropagation()">
@@ -141,7 +138,6 @@
         }
     </script>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <!-- Modal de confirmacion antes de crear el Pedido y derivar a WhatsApp -->
     <div id="modalConfirmarContinuarCompra" class="modal-overlay" onclick="cancelarContinuarCompra()">
         <div class="modal-box" onclick="event.stopPropagation()">
@@ -173,7 +169,6 @@
         }
     </script>
 
-    <!-- Esto lo hizo claude code ↓ -->
     <script type="text/javascript">
         // Guarda y restaura el scroll en cada postback parcial del UpdatePanel
         // (mismo mecanismo que en el catalogo). El override de scroll-behavior es

@@ -15,8 +15,19 @@
                 OnClick="btnAgregarArticulo_Click" CssClass="btn-primary" />
             <asp:Button ID="btnCategoriasMarcas" Text="Categorías y Marcas" runat="server"
                 OnClick="btnCategoriasMarcas_Click" CssClass="btn-outline" />
+            <asp:Button ID="btnImportarCsv" Text="Importar desde CSV" runat="server"
+                OnClick="btnImportarCsv_Click" CssClass="btn-outline" />
+            <asp:Button ID="btnExportarCsv" Text="Exportar a CSV" runat="server"
+                OnClick="btnExportarCsv_Click" CssClass="btn-outline" />
         </div>
     </div>
+
+    <!-- Aviso de articulos con poco stock (5 o menos) -->
+    <asp:Panel ID="pnlStockBajo" runat="server" Visible="false" CssClass="aviso-stock">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+        <b><asp:Label ID="lblCantidadStockBajo" runat="server" /></b>
+        <asp:Label ID="lblArticulosStockBajo" runat="server" />
+    </asp:Panel>
 
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
@@ -89,7 +100,6 @@
                 </div>
             </div>
 
-            <!-- Esto lo hizo claude code ↓ -->
             <!-- Modal de confirmacion para "Eliminar" -->
             <div id="modalConfirmarEliminarArticulo" class="modal-overlay" onclick="cancelarEliminarArticulo()">
                 <div class="modal-box" onclick="event.stopPropagation()">

@@ -4,7 +4,6 @@ using Dominio;
 
 namespace Consultas
 {
-    // Esto lo hizo claude code ↓
     public class KpisDashboard
     {
         public decimal TotalVentas { get; set; }
@@ -62,10 +61,7 @@ namespace Consultas
                     kpis.TicketPromedio = kpis.CantidadVentas > 0 ? kpis.TotalVentas / kpis.CantidadVentas : 0;
                 }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -79,10 +75,7 @@ namespace Consultas
                 if (datosPendientes.Lector.Read())
                     kpis.PedidosPendientes = (int)datosPendientes.Lector["Cant"];
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datosPendientes.cerrarConexion();
@@ -98,10 +91,7 @@ namespace Consultas
                 if (datosCancelados.Lector.Read())
                     kpis.PedidosCancelados = (int)datosCancelados.Lector["Cant"];
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datosCancelados.cerrarConexion();
@@ -132,10 +122,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -166,10 +153,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -198,10 +182,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -231,10 +212,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -262,10 +240,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -286,10 +261,7 @@ namespace Consultas
 
                 return null;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();

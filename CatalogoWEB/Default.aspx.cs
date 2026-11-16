@@ -14,16 +14,13 @@ namespace CatalogoWEB
     {
         ConsultasCatalogo catalogo = new ConsultasCatalogo();
 
-        // Esto lo hizo claude code ↓.
         private List<int> _idsFavoritos = new List<int>();
 
-        // Esto lo hizo claude code ↓.
         protected bool EsFavorito(int articuloId)
         {
             return _idsFavoritos.Contains(articuloId);
         }
 
-        // Esto lo hizo claude code ↓.
         private void CargarFavoritos()
         {
             if (Seguridad.SesionActiva(Session["Usuario"]))
@@ -43,7 +40,6 @@ namespace CatalogoWEB
             return item != null ? item.Cantidad : 0;
         }
 
-        // Esto lo hizo claude code ↓.
         // Vuelve a bindear el catalogo respetando el filtro de busqueda aplicado (si hay), para que carrito/favoritos no lo pisen con la lista completa.
         private void RecargarCatalogo()
         {
@@ -55,8 +51,31 @@ namespace CatalogoWEB
             else
                 lista = Session["ListaEnSession"] as List<Articulo> ?? catalogo.ListarArticulo();
 
-            repRepetidor.DataSource = lista;
+            repRepetidor.DataSource = Ordenar(lista);
             repRepetidor.DataBind();
+        }
+
+        // Ordena la lista segun lo que se eligio en el desplegable "Ordenar por".
+        private List<Articulo> Ordenar(List<Articulo> lista)
+        {
+            switch (ddlOrden.SelectedValue)
+            {
+                case "PrecioAsc":
+                    return lista.OrderBy(a => a.Precio).ToList();
+                case "PrecioDesc":
+                    return lista.OrderByDescending(a => a.Precio).ToList();
+                case "NombreAsc":
+                    return lista.OrderBy(a => a.Nombre).ToList();
+                case "NombreDesc":
+                    return lista.OrderByDescending(a => a.Nombre).ToList();
+                default:
+                    return lista;
+            }
+        }
+
+        protected void ddlOrden_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RecargarCatalogo();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -78,7 +97,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         // Arma el arbol de filtros (categoria -> marcas) a partir de los articulos ya cargados, no de las tablas MARCAS/CATEGORIAS (para no mostrar filtros sin productos detras).
         private void CargarFiltros(List<Articulo> articulos)
         {
@@ -102,7 +120,6 @@ namespace CatalogoWEB
             repFiltros.DataBind();
         }
 
-        // Esto lo hizo claude code ↓.
         // Protected (no private): el markup del .aspx compila en una clase que hereda de esta, asi que necesita acceso a estos tipos para el Container.DataItem del PlaceHolder.
         protected class FiltroCategoria
         {
@@ -110,7 +127,6 @@ namespace CatalogoWEB
             public List<FiltroMarca> Marcas { get; set; }
         }
 
-        // Esto lo hizo claude code ↓.
         protected class FiltroMarca
         {
             public string Categoria { get; set; }
@@ -196,7 +212,6 @@ namespace CatalogoWEB
                 Session.Add("CarritoEnSession", carrito);
                 RecargarCatalogo();
 
-                // Esto lo hizo claude code ↓.
                 if (agregado)
                     ScriptManager.RegisterStartupScript(this, GetType(), "ToastCarrito", "mostrarToast('Artículo agregado al carrito');", true);
             }
@@ -208,7 +223,6 @@ namespace CatalogoWEB
         }
 
 
-        // Esto lo hizo claude code ↓.
         protected void btnMasCantidad_Click(object sender, EventArgs e)
         {
             // Barrera de seguridad para que sin login no se pueda agregar al carrito (aunque no deberia aparecer, por las dudas).
@@ -245,7 +259,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         // Al llegar a 0 saca el articulo del carrito directamente, sin confirmacion.
         protected void btnMenosCantidad_Click(object sender, EventArgs e)
         {
@@ -279,7 +292,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnFavorito_Click(object sender, EventArgs e)
         {
             // Barrera de seguridad para que no deje agregar a favoritos sin login.

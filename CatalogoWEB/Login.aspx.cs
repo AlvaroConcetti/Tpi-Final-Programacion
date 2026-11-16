@@ -54,7 +54,7 @@ namespace CatalogoWEB
                     return;
                 }
 
-                if (Validacion.VlidarMinLength(txtBoxContrasena.Text, 6))
+                if (Validacion.ValidarMinLength(txtBoxContrasena.Text, 6))
                 {
                     lblMensajeValidacion.Text = "Por favor, ingrese una contraseña con minimo 6 caracteres";
                     return;
@@ -76,7 +76,7 @@ namespace CatalogoWEB
             }
             catch (Exception ex)
             {
-                Session.Add("Error", ex.ToString());
+                Session.Add("Error", ex);
                 Response.Redirect("Error.aspx", false);
             }
         }
