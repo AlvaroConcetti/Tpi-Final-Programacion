@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.WebSockets;
 using Consultas;
 using Dominio;
-using static System.Net.WebRequestMethods;
 
 namespace CatalogoWEB
 {
@@ -42,6 +40,14 @@ namespace CatalogoWEB
                     int idArticulo = int.Parse(Request.QueryString["id"]);
                     List<Articulo> articulos = consultasCatalogo.ListarArticulo();
                     Articulo articuloSeleccionado = articulos.Find(x => x.Id == idArticulo);
+
+                    // Por si el articulo ya no existe (lo borraron o cambiaron el Id en la URL).
+                    if (articuloSeleccionado == null)
+                    {
+                        Session.Add("Error", "El artículo que querés editar no existe.");
+                        Response.Redirect("Error.aspx", false);
+                        return;
+                    }
 
                     txtBoxId.Text = articuloSeleccionado.Id.ToString();
                     // "0.##" (sin separador de miles): con cultura es-AR "N2" daba "1.500,00",
@@ -143,9 +149,24 @@ namespace CatalogoWEB
                 }
                 if (txtImagen.PostedFile != null && txtImagen.PostedFile.ContentLength > 0)
                 {
-                    string ruta = Server.MapPath("./Images/");
-                    string nombreArchivo = "articulo-" + txtBoxCodigo.Text + ".jpg";
-                    txtImagen.PostedFile.SaveAs(ruta + nombreArchivo);
+                    string errorImagen = ValidarImagen(txtImagen.PostedFile);
+                    if (errorImagen != null)
+                    {
+                        Session.Add("Error", errorImagen);
+                        Response.Redirect("Error.aspx", false);
+                        return;
+                    }
+
+                    // El nombre del archivo se arma con el codigo del articulo. Le sacamos todo lo que
+                    // no sea letra, numero, guion o guion bajo, para que no se pueda poner algo como
+                    // "../../Web.config" y guardar el archivo fuera de la carpeta Images.
+                    string codigoSeguro = Regex.Replace(txtBoxCodigo.Text, "[^A-Za-z0-9_-]", "");
+                    if (codigoSeguro == "")
+                        codigoSeguro = "sin-codigo";
+
+                    string extension = System.IO.Path.GetExtension(txtImagen.PostedFile.FileName).ToLower();
+                    string nombreArchivo = "articulo-" + codigoSeguro + extension;
+                    txtImagen.PostedFile.SaveAs(System.IO.Path.Combine(Server.MapPath("~/Images/"), nombreArchivo));
                     articuloNuevo.UrlImagen = "Images/" + nombreArchivo;
                 }
                 else if (articuloExistente != null)
@@ -177,6 +198,24 @@ namespace CatalogoWEB
                 Session.Add("Error", ex);
                 Response.Redirect("Error.aspx", false);
             }
+        }
+
+        // Valida la imagen subida: solo JPG, PNG o WEBP y como maximo 2 MB.
+        // Devuelve el mensaje de error, o null si esta todo bien.
+        private string ValidarImagen(HttpPostedFile archivo)
+        {
+            string extension = System.IO.Path.GetExtension(archivo.FileName).ToLower();
+
+            if (extension != ".jpg" && extension != ".jpeg" && extension != ".png" && extension != ".webp")
+                return "La imagen debe ser JPG, PNG o WEBP.";
+
+            if (!archivo.ContentType.StartsWith("image/"))
+                return "El archivo no es una imagen.";
+
+            if (archivo.ContentLength > 2 * 1024 * 1024)
+                return "La imagen no puede pesar más de 2 MB.";
+
+            return null;
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)

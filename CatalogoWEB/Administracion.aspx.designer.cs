@@ -24,6 +24,31 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.Button btnAgregarArticulo;
 
         /// <summary>
+        /// btnImportarCsv control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Button btnImportarCsv;
+
+        /// <summary>
+        /// btnExportarCsv control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Button btnExportarCsv;
+
+        /// <summary>
+        /// pnlStockBajo control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Panel pnlStockBajo;
+
+        /// <summary>
+        /// lblCantidadStockBajo control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblCantidadStockBajo;
+
+        /// <summary>
+        /// lblArticulosStockBajo control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblArticulosStockBajo;
+
+        /// <summary>
         /// txtBoxFiltrar control.
         /// </summary>
         /// <remarks>

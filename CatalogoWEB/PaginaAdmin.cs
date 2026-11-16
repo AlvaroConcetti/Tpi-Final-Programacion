@@ -3,23 +3,21 @@ using Consultas;
 
 namespace CatalogoWEB
 {
-    // Clase base para todas las paginas del panel de administracion.
-    // Hace el control de permisos en OnInit, ANTES de Page_Load y de los eventos de botones:
-    // si el usuario no es admin, redirige a Error.aspx y corta la ejecucion de la pagina.
+    // Todas las paginas de administracion heredan de esta clase en vez de System.Web.UI.Page.
+    // Asi el control de "es admin?" esta en un solo lugar y no repetido en cada pagina.
     //
-    // Por que no alcanza con el chequeo en Page_Load + Response.Redirect(url, false):
-    // con "false" la pagina sigue ejecutandose despues del redirect, asi que se cargan los datos
-    // y se procesan los clicks (eliminar articulo, confirmar venta, etc.) igual. Un cliente que
-    // arme el POST a mano podria disparar acciones de admin. Con "true" se termina el request ahi.
+    // Se hace en OnInit porque se ejecuta antes que Page_Load y que los eventos de los botones.
+    // Ademas el Redirect va con "true" para que corte la ejecucion de la pagina: con "false"
+    // la pagina seguia corriendo y alguien sin permisos podia llegar a disparar un boton
+    // (por ejemplo eliminar un articulo).
     public class PaginaAdmin : System.Web.UI.Page
     {
         protected override void OnInit(EventArgs e)
         {
             if (!Seguridad.Admin(Session["Usuario"]))
             {
-                Session["Error"] = "No tenés permisos para ingresar a esta sección.";
+                Session.Add("Error", "No tienes permisos para ingresar aqui.");
                 Response.Redirect("Error.aspx", true);
-                return;
             }
 
             base.OnInit(e);

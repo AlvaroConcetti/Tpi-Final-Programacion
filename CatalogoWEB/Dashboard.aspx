@@ -4,7 +4,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <!-- Esto lo hizo claude code ↓ -->
     <div class="page-header">
         <div>
             <h1 class="page-title">Dashboard</h1>
@@ -93,7 +92,7 @@
                 <asp:Repeater runat="server" ID="repStockBajo">
                     <ItemTemplate>
                         <div class="dashboard-list-row">
-                            <span class="dashboard-list-nombre"><%# Eval("Nombre") %> <span class="dashboard-list-codigo">(<%# Eval("Codigo") %>)</span></span>
+                            <span class="dashboard-list-nombre"><%#: Eval("Nombre") %> <span class="dashboard-list-codigo">(<%#: Eval("Codigo") %>)</span></span>
                             <span class='<%# (int)Eval("Stock") == 0 ? "dashboard-stock dashboard-stock--cero" : "dashboard-stock" %>'>
                                 <%# (int)Eval("Stock") == 0 ? "Sin stock" : Eval("Stock") + " u." %>
                             </span>
@@ -110,7 +109,7 @@
                 <asp:Repeater runat="server" ID="repFavoritos">
                     <ItemTemplate>
                         <div class="dashboard-list-row">
-                            <span class="dashboard-list-nombre"><%# Eval("Nombre") %></span>
+                            <span class="dashboard-list-nombre"><%#: Eval("Nombre") %></span>
                             <span class="dashboard-stock"><%# Eval("Cantidad") %></span>
                         </div>
                     </ItemTemplate>

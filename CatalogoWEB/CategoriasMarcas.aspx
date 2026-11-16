@@ -12,7 +12,6 @@
         </div>
     </div>
 
-    <!-- Esto lo hizo claude code -->
     <!-- Alerta cuando se intenta eliminar una marca/categoria que todavia esta en uso -->
     <div id="toastAlerta" class="toast-notification toast-notification--error">
         <i class="bi bi-exclamation-triangle-fill"></i>
@@ -31,7 +30,6 @@
         }
     </script>
 
-    <!-- Esto lo hizo claude code -->
     <!-- Notificacion pasiva al guardar la edicion de una marca o categoria -->
     <div id="toastCarrito" class="toast-notification">
         <i class="bi bi-check-circle-fill"></i>
@@ -65,7 +63,7 @@
                         <asp:Repeater ID="repMarcas" runat="server" OnItemCommand="repMarcas_ItemCommand">
                             <ItemTemplate>
                                 <div class="admin-list-row">
-                                    <asp:TextBox runat="server" ID="txtDescripcionMarca" Text='<%#Eval("Descripcion")%>' CssClass="form-control" MaxLength="50" />
+                                    <asp:TextBox runat="server" ID="txtDescripcionMarca" Text='<%# Eval("Descripcion") %>' CssClass="form-control" MaxLength="50" />
                                     <asp:Button runat="server" Text="Guardar" CommandName="Guardar" CommandArgument='<%#Eval("Id")%>' CssClass="btn-outline" CausesValidation="false" />
                                     <asp:Button runat="server" Text="Eliminar" CssClass="btn-danger-soft" CausesValidation="false"
                                         UseSubmitBehavior="false"
@@ -87,7 +85,7 @@
                         <asp:Repeater ID="repCategorias" runat="server" OnItemCommand="repCategorias_ItemCommand">
                             <ItemTemplate>
                                 <div class="admin-list-row">
-                                    <asp:TextBox runat="server" ID="txtDescripcionCategoria" Text='<%#Eval("Descripcion")%>' CssClass="form-control" MaxLength="50" />
+                                    <asp:TextBox runat="server" ID="txtDescripcionCategoria" Text='<%# Eval("Descripcion") %>' CssClass="form-control" MaxLength="50" />
                                     <asp:Button runat="server" Text="Guardar" CommandName="Guardar" CommandArgument='<%#Eval("Id")%>' CssClass="btn-outline" CausesValidation="false" />
                                     <asp:Button runat="server" Text="Eliminar" CssClass="btn-danger-soft" CausesValidation="false"
                                         UseSubmitBehavior="false"
@@ -100,7 +98,6 @@
 
             </div>
 
-            <!-- Esto lo hizo claude code -->
             <!-- Soporte del modal de confirmacion: el tipo (0=marca, 1=categoria) decide que boton oculto disparar -->
             <asp:HiddenField ID="hdnIdMarcaAEliminar" runat="server" />
             <asp:Button ID="btnEliminarMarcaOculto" runat="server" OnClick="btnEliminarMarcaOculto_Click" Style="display: none;" CausesValidation="false" />

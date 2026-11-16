@@ -27,7 +27,7 @@
                         <div class="order-card-header">
                             <div>
                                 <strong>Pedido #<%#Eval("Id")%></strong>
-                                <span class="order-card-meta"><%#Eval("EmailUsuario")%> · <%#Eval("FechaPedido", "{0:dd/MM/yyyy HH:mm}")%></span>
+                                <span class="order-card-meta"><%#: Eval("EmailUsuario") %> · <%#Eval("FechaPedido", "{0:dd/MM/yyyy HH:mm}")%></span>
                             </div>
                             <span class="order-card-total">Total: $<%#Eval("Total", "{0:N2}")%></span>
                         </div>
@@ -35,7 +35,7 @@
                         <asp:Repeater runat="server" ID="repDetalle" DataSource='<%#Eval("Detalle")%>'>
                             <ItemTemplate>
                                 <div class="order-line">
-                                    <span><%#Eval("Articulo.Nombre")%> x<%#Eval("Cantidad")%></span>
+                                    <span><%#: Eval("Articulo.Nombre") %> x<%#Eval("Cantidad")%></span>
                                     <span>$<%#Eval("Subtotal", "{0:N2}")%></span>
                                 </div>
                             </ItemTemplate>
@@ -64,7 +64,6 @@
                 <p>No hay pedidos cancelados.</p>
             </asp:Panel>
 
-            <!-- Esto lo hizo claude code ↓ -->
             <!-- Modal de confirmacion compartido para "Dar de alta de nuevo" (0) y "Borrar definitivamente" (1, con advertencia extra) -->
             <div id="modalConfirmarAccionPedidoCancelado" class="modal-overlay" onclick="cancelarAccionPedidoCancelado()">
                 <div class="modal-box" onclick="event.stopPropagation()">

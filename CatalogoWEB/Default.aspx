@@ -30,12 +30,12 @@
                 <ItemTemplate>
                     <div class="hero-pick" onclick="clickCard(event, this)">
                         <div class="hero-pick-media">
-                            <img src="<%#Eval("UrlImagen")%>" alt="<%#Eval("Nombre")%>" onerror="this.onerror=null;this.style.visibility='hidden'" />
+                            <img src="<%#: Eval("UrlImagen") %>" alt="<%#: Eval("Nombre") %>" onerror="this.onerror=null;this.style.visibility='hidden'" />
                         </div>
                         <div class="hero-callout">
                             <div class="hero-callout-text">
                                 <span class="hero-callout-label">Recién agregado</span>
-                                <span class="hero-callout-name"><%#Eval("Nombre")%></span>
+                                <span class="hero-callout-name"><%#: Eval("Nombre") %></span>
                                 <span class="hero-callout-price">$<%#Eval("Precio", "{0:N2}")%></span>
                             </div>
                             <!-- Mismo postback de "Ver detalle" que las cards de la grilla -->
@@ -71,6 +71,20 @@
                 <span id="lblToggleFiltros">Ocultar filtros</span>
                 <i class="bi bi-sliders2"></i>
             </button>
+
+            <!-- Ordenar por precio o nombre (recarga la lista en el servidor) -->
+            <div class="plp-sort">
+                <label class="visually-hidden" for="<%= ddlOrden.ClientID %>">Ordenar por</label>
+                <asp:DropDownList ID="ddlOrden" runat="server" CssClass="plp-sort-select"
+                    AutoPostBack="true" OnSelectedIndexChanged="ddlOrden_SelectedIndexChanged">
+                    <asp:ListItem Value="" Text="Ordenar por" />
+                    <asp:ListItem Value="PrecioAsc" Text="Precio: menor a mayor" />
+                    <asp:ListItem Value="PrecioDesc" Text="Precio: mayor a menor" />
+                    <asp:ListItem Value="NombreAsc" Text="Nombre: A - Z" />
+                    <asp:ListItem Value="NombreDesc" Text="Nombre: Z - A" />
+                </asp:DropDownList>
+                <i class="bi bi-chevron-down"></i>
+            </div>
         </div>
     </div>
 
@@ -87,8 +101,8 @@
                     <div class="filter-group">
                         <div class="filter-category-row">
                             <label class="filter-checkbox-label">
-                                <input type="checkbox" class="filtro-categoria" value='<%#Eval("Nombre")%>' onchange="aplicarFiltros()" />
-                                <span><%#Eval("Nombre")%></span>
+                                <input type="checkbox" class="filtro-categoria" value='<%#: Eval("Nombre") %>' onchange="aplicarFiltros()" />
+                                <span><%#: Eval("Nombre") %></span>
                             </label>
                             <asp:PlaceHolder runat="server" Visible='<%# ((FiltroCategoria)Container.DataItem).Marcas.Count > 0 %>'>
                                 <button type="button" class="filter-toggle" onclick="toggleCategoriaExpand(this)" aria-label="Desplegar marcas">
@@ -102,9 +116,9 @@
                                 <ItemTemplate>
                                     <label class="filter-checkbox-label filter-checkbox-label--nested">
                                         <input type="checkbox" class="filtro-marca"
-                                            data-categoria='<%#Eval("Categoria")%>' data-marca='<%#Eval("Nombre")%>'
+                                            data-categoria='<%#: Eval("Categoria") %>' data-marca='<%#: Eval("Nombre") %>'
                                             onchange="aplicarFiltros()" />
-                                        <span><%#Eval("Nombre")%></span>
+                                        <span><%#: Eval("Nombre") %></span>
                                     </label>
                                 </ItemTemplate>
                             </asp:Repeater>
@@ -144,11 +158,11 @@
                                     <!-- Toda la card es clickeable (salvo .no-card-click) y dispara el postback de btnDetalle -->
                                     <!-- data-categoria/data-marca: los usa el filtro del sidebar (JS) -->
                                     <div class="product-card"
-                                        data-categoria='<%#Eval("Categoria")%>' data-marca='<%#Eval("Marca")%>'
+                                        data-categoria='<%#: Eval("Categoria") %>' data-marca='<%#: Eval("Marca") %>'
                                         onclick="clickCard(event, this)">
 
                                         <div class="product-media">
-                                            <img src="<%#Eval("UrlImagen")%>" alt="<%#Eval("Nombre")%>" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f5f5f5%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%239e9ea0%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
+                                            <img src="<%#: Eval("UrlImagen") %>" alt="<%#: Eval("Nombre") %>" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f5f5f5%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%239e9ea0%22%3ESin imagen%3C/text%3E%3C/svg%3E'" />
 
                                             <!-- Boton favorito sobre la foto -->
                                             <asp:LinkButton ID="btnFavorito" runat="server" OnClick="btnFavorito_Click"
@@ -163,8 +177,8 @@
                                         <div class="product-info">
                                             <!-- Etiqueta de stock: mismo umbral que el panel "Stock bajo" del Dashboard (5 o menos) -->
                                             <p class='<%# (int)Eval("Stock") == 0 ? "product-status product-status--agotado" : "product-status" %>'><%# (int)Eval("Stock") == 0 ? "Agotado" : ((int)Eval("Stock") <= 5 ? "Últimas unidades" : "") %></p>
-                                            <p class="product-name"><%#Eval("Nombre")%></p>
-                                            <p class="product-meta"><%#Eval("Categoria")%> · <%#Eval("Marca")%></p>
+                                            <p class="product-name"><%#: Eval("Nombre") %></p>
+                                            <p class="product-meta"><%#: Eval("Categoria") %> · <%#: Eval("Marca") %></p>
                                             <p class="product-meta"><%# (int)Eval("Stock") > 0 ? Eval("Stock") + " en stock" : "Sin stock" %></p>
                                             <p class="product-price">$<%#Eval("Precio", "{0:N2}")%></p>
 

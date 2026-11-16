@@ -126,8 +126,8 @@
                     <span id="lblImagen"><%= EsEdicion ? "Cambiar imagen" : "Elegir imagen" %></span>
                 </label>
                 <input type="file" id="txtImagen" runat="server" class="visually-hidden"
-                    accept="image/*" onchange="mostrarPreview(this)" />
-                <p class="form-hint" id="nombreArchivo">JPG o PNG. Se recomienda fondo blanco.</p>
+                    accept=".jpg,.jpeg,.png,.webp" onchange="mostrarPreview(this)" />
+                <p class="form-hint" id="nombreArchivo">JPG, PNG o WEBP, hasta 2 MB. Se recomienda fondo blanco.</p>
             </section>
         </aside>
     </div>

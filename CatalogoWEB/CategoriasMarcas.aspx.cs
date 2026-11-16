@@ -1,4 +1,4 @@
-using Consultas;
+﻿using Consultas;
 using Dominio;
 using System;
 using System.Collections.Generic;
@@ -87,7 +87,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void repMarcas_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             try
@@ -119,7 +118,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void repCategorias_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             try
@@ -151,7 +149,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnEliminarMarcaOculto_Click(object sender, EventArgs e)
         {
             try
@@ -172,7 +169,6 @@ namespace CatalogoWEB
             }
         }
 
-        // Esto lo hizo claude code ↓.
         protected void btnEliminarCategoriaOculto_Click(object sender, EventArgs e)
         {
             try

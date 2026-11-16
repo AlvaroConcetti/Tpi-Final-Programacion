@@ -10,11 +10,23 @@
             <h1 class="page-title">Artículos</h1>
             <p class="page-subtitle">Gestioná los artículos del catálogo</p>
         </div>
+        <!-- "Categorias y marcas" esta en la barra de secciones del admin (Master) -->
         <div class="page-actions">
+            <asp:Button ID="btnImportarCsv" Text="Importar CSV" runat="server"
+                OnClick="btnImportarCsv_Click" CssClass="btn-outline" />
+            <asp:Button ID="btnExportarCsv" Text="Exportar CSV" runat="server"
+                OnClick="btnExportarCsv_Click" CssClass="btn-outline" />
             <asp:Button ID="btnAgregarArticulo" Text="Agregar artículo" runat="server"
                 OnClick="btnAgregarArticulo_Click" CssClass="btn-primary" />
         </div>
     </div>
+
+    <!-- Aviso de articulos con poco stock (5 o menos) -->
+    <asp:Panel ID="pnlStockBajo" runat="server" Visible="false" CssClass="aviso-stock">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+        <b><asp:Label ID="lblCantidadStockBajo" runat="server" /></b>
+        <asp:Label ID="lblArticulosStockBajo" runat="server" />
+    </asp:Panel>
 
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
@@ -100,7 +112,6 @@
                 </div>
             </div>
 
-            <!-- Esto lo hizo claude code ↓ -->
             <!-- Modal de confirmacion para "Eliminar" -->
             <div id="modalConfirmarEliminarArticulo" class="modal-overlay" onclick="cancelarEliminarArticulo()">
                 <div class="modal-box" onclick="event.stopPropagation()">

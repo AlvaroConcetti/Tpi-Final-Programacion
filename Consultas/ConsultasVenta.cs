@@ -10,7 +10,6 @@ namespace Consultas
 {
     public class ConsultasVenta
     {
-        // Esto lo hizo claude code ↓.
         public int CrearPedido(int idUser)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -22,10 +21,7 @@ namespace Consultas
 
                 return datos.ejecutarAccionScalar();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -46,10 +42,7 @@ namespace Consultas
 
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -85,10 +78,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -129,10 +119,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -158,10 +145,7 @@ namespace Consultas
 
                 return null;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -178,10 +162,7 @@ namespace Consultas
                 datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -218,10 +199,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -257,10 +235,7 @@ namespace Consultas
 
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -277,10 +252,7 @@ namespace Consultas
                 datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -297,10 +269,7 @@ namespace Consultas
                 datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -321,10 +290,7 @@ namespace Consultas
 
                 return null;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();
@@ -341,10 +307,7 @@ namespace Consultas
                 datos.setearParametro("@telefono", telefono);
                 datos.ejecutarAccion();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             finally
             {
                 datos.cerrarConexion();

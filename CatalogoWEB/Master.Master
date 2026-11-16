@@ -40,6 +40,11 @@
                     <a class="topbar-link topbar-link--admin" href="Dashboard.aspx">Dashboard</a>
                     <span class="topbar-sep topbar-link--admin">|</span>
                     <%}%>
+                    <%if (Consultas.Seguridad.SesionActiva(Session["Usuario"]))
+                        {%>
+                    <a class="topbar-link" href="Perfil.aspx">Mi perfil</a>
+                    <span class="topbar-sep">|</span>
+                    <%}%>
                     <asp:Button Text="Iniciar sesión" CausesValidation="false" runat="server" ID="btnLogin"
                         CssClass="topbar-link topbar-btn" Visible="true" OnClick="btnLogin_Click" />
                     <asp:Button Text="Cerrar sesión" runat="server" ID="btnCerrarSesion"
@@ -75,6 +80,10 @@
             <a class="nav-link-item" href="Default.aspx">Catálogo</a>
             <a class="nav-link-item" href="Favoritos.aspx">Favoritos</a>
             <a class="nav-link-item" href="Carrito.aspx">Mi carrito</a>
+            <%if (Consultas.Seguridad.SesionActiva(Session["Usuario"]))
+                {%>
+            <a class="nav-link-item" href="Perfil.aspx">Mi perfil</a>
+            <%}%>
             <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
                 {%>
             <span class="nav-mobile-label">Administración</span>
@@ -93,7 +102,7 @@
                 <span class="admin-nav-title">Administración</span>
                 <div class="admin-nav-links">
                     <a class="admin-nav-link <%= Activo("Dashboard.aspx") %>" href="Dashboard.aspx">Dashboard</a>
-                    <a class="admin-nav-link <%= Activo("Administracion.aspx", "AgregarArticulo.aspx") %>" href="Administracion.aspx">Artículos</a>
+                    <a class="admin-nav-link <%= Activo("Administracion.aspx", "AgregarArticulo.aspx", "ImportarArticulos.aspx") %>" href="Administracion.aspx">Artículos</a>
                     <a class="admin-nav-link <%= Activo("CategoriasMarcas.aspx") %>" href="CategoriasMarcas.aspx">Categorías y marcas</a>
                     <a class="admin-nav-link <%= Activo("Ventas.aspx", "PedidosCancelados.aspx") %>" href="Ventas.aspx">Ventas</a>
                 </div>

@@ -659,6 +659,32 @@ input[type="file"].form-control { padding: 0.6rem 0.9rem; font-size: 14px; }
 }
 .plp-toggle:hover { color: var(--text-secondary); }
 
+/* "Ordenar por": select sin borde que se lee como texto, igual que "Ocultar filtros" */
+.plp-sort {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.plp-sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    padding: 0.25rem 1.6rem 0.25rem 0;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+.plp-sort-select:hover { color: var(--text-secondary); }
+.plp-sort > i {
+    position: absolute;
+    right: 0;
+    font-size: 13px;
+    pointer-events: none;
+}
+
 /* Buscador tipo pildora gris */
 .search-bar {
     display: flex;
@@ -1806,4 +1832,73 @@ input[type="file"].form-control { padding: 0.6rem 0.9rem; font-size: 14px; }
     display: block;
     color: var(--text-secondary);
     margin: 0.75rem 0 2rem;
+}
+
+/* ── AVISO DE STOCK BAJO (Administracion) ── */
+.aviso-stock {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    background: #fdf0ea;
+    color: var(--accent);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 15px;
+}
+.aviso-stock b { font-weight: 600; }
+
+/* ── MI PERFIL / IMPORTAR CSV ── */
+.profile-grid,
+.import-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+    max-width: 1000px;
+}
+.import-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); max-width: none; }
+
+/* Fila final de una tarjeta: mensaje a la izquierda, boton a la derecha */
+.form-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-top: 1.5rem;
+}
+.form-message {
+    margin: 0 auto 0 0;
+    font-size: 14px;
+}
+.form-message:empty { display: none; }
+
+.import-text,
+.import-list {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+.import-list { padding-left: 1.1rem; margin-bottom: 1.25rem; }
+.import-list li + li { margin-top: 0.25rem; }
+.import-code {
+    font-size: 13px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+.import-result { margin-top: 2.5rem; }
+.import-summary {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.import-ok { background: var(--success-bg); color: var(--success); }
+
+@media (max-width: 767px) {
+    .profile-grid,
+    .import-grid { grid-template-columns: 1fr; }
 }

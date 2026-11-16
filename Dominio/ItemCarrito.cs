@@ -11,7 +11,6 @@ namespace Dominio
         public Articulo Articulo { get; set; }
         public int Cantidad { get; set; }
 
-        //Esto lo hizo claude code
         public decimal Subtotal
         {
             get { return Articulo.Precio * Cantidad; }

@@ -11,7 +11,6 @@ using Dominio;
 
 namespace CatalogoWEB
 {
-    // Esto lo hizo claude code ↓.
     public partial class Dashboard : PaginaAdmin
     {
         ConsultasDashboard consultasDashboard = new ConsultasDashboard();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System;
 
 namespace CatalogoWEB
 {
@@ -11,11 +6,28 @@ namespace CatalogoWEB
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			// Carga el error que tenga guardado en sesion.
-			if (Session["Error"] != null)
+			object error = Session["Error"];
+			Session.Remove("Error");
+
+			// Si es un mensaje nuestro (string) lo mostramos tal cual.
+			// Si es una excepcion no mostramos el detalle, porque trae rutas del servidor y
+			// consultas SQL. Solo lo mostramos cuando estamos probando en nuestra maquina.
+			if (error is Exception && !Request.IsLocal)
 			{
-				lblError.Text = Session["Error"].ToString();
-            }
+				lblError.Text = "Ocurrió un error inesperado. Intentá de nuevo en unos minutos.";
+			}
+			else if (error is Exception)
+			{
+				lblError.Text = Server.HtmlEncode(((Exception)error).Message);
+			}
+			else if (error != null)
+			{
+				lblError.Text = Server.HtmlEncode(error.ToString());
+			}
+			else
+			{
+				lblError.Text = "Ocurrió un error inesperado.";
+			}
 		}
 	}
 }
