@@ -15,6 +15,33 @@ namespace CatalogoWEB
     {
 
         /// <summary>
+        /// pnlBienvenida control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlBienvenida;
+
+        /// <summary>
+        /// pnlVitrina control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlVitrina;
+
+        /// <summary>
+        /// repVitrina control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repVitrina;
+
+        /// <summary>
         /// repFiltros control.
         /// </summary>
         /// <remarks>

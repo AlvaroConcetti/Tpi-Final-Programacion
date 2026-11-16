@@ -75,7 +75,23 @@ namespace CatalogoWEB
                 repRepetidor.DataBind();
 
                 CargarFiltros(listaOriginal);
+                CargarVitrina(listaOriginal);
             }
+        }
+
+        // Vitrina del cartel de bienvenida: los 3 articulos con stock agregados mas recientemente
+        // (Id mas alto = cargado ultimo). Si no hay ninguno, la vitrina no se muestra.
+        private void CargarVitrina(List<Articulo> articulos)
+        {
+            List<Articulo> recientes = articulos
+                .Where(a => a.Stock > 0)
+                .OrderByDescending(a => a.Id)
+                .Take(3)
+                .ToList();
+
+            repVitrina.DataSource = recientes;
+            repVitrina.DataBind();
+            pnlVitrina.Visible = recientes.Count > 0;
         }
 
         // Esto lo hizo claude code ↓.
@@ -122,6 +138,9 @@ namespace CatalogoWEB
         {
             Session["FiltroCatalogo"] = txtBoxFiltro.Text;
             RecargarCatalogo();
+
+            // Con una busqueda aplicada se oculta el cartel de bienvenida para que los resultados queden arriba.
+            pnlBienvenida.Visible = string.IsNullOrEmpty(txtBoxFiltro.Text);
         }
 
         // Boton de borrar el filtro de nombre.
@@ -130,6 +149,7 @@ namespace CatalogoWEB
             Session.Remove("FiltroCatalogo");
             txtBoxFiltro.Text = "";
             RecargarCatalogo();
+            pnlBienvenida.Visible = true;
         }
 
         // Manda a la pagina de detalle segun el articulo que se haya clickeado.

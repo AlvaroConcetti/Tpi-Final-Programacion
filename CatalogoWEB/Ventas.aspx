@@ -16,10 +16,10 @@
         <ContentTemplate>
 
             <!-- TextBox para ingresar el numero de whatsapp encargado de recibir los pedidos + validaciones en el front -->
-            <div class="panel" style="padding: 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div class="whatsapp-bar">
                 <div>
                     <label class="form-label">Teléfono de WhatsApp para recibir pedidos</label>
-                    <div class="d-flex gap-2 flex-wrap" style="max-width: 420px;">
+                    <div class="whatsapp-form">
                         <asp:TextBox ID="txtBoxTelefono" runat="server" CssClass="form-control" placeholder="Ej: 5491122334455" MaxLength="20" />
                         <asp:Button ID="btnGuardarTelefono" runat="server" Text="Guardar" OnClick="btnGuardarTelefono_Click" CssClass="btn-primary" />
                     </div>
@@ -30,7 +30,7 @@
                         ControlToValidate="txtBoxTelefono" ValidationExpression="^[1-9]\d{7,14}$"
                         ErrorMessage="Formato inválido. Usá solo números, con código de país, sin espacios ni guiones (ej: 5491122334455)."
                         CssClass="validation-error" Display="Dynamic" />
-                    <asp:Label ID="lblMensajeTelefono" runat="server" Style="display: block; margin-top: 0.5rem; font-size: 13px; color: var(--success);" />
+                    <asp:Label ID="lblMensajeTelefono" runat="server" CssClass="success-text" />
                 </div>
 
                 <!-- Boton para ir a la pagina de pedidos cancelados -->
@@ -38,7 +38,7 @@
                     OnClick="btnPedidosCancelados_Click" CssClass="btn-outline" CausesValidation="false" />
             </div>
 
-            <asp:Label ID="lblMensaje" runat="server" CssClass="validation-error" Style="display: block; margin-bottom: 1rem;" />
+            <asp:Label ID="lblMensaje" runat="server" CssClass="validation-error" Style="margin-bottom: 1rem;" />
 
             <!-- Repetidor con los datos del pedido -->
             <asp:Repeater runat="server" ID="repPedidos">
@@ -80,8 +80,8 @@
             </asp:Repeater>
 
             <asp:Panel ID="pnlVacio" runat="server" CssClass="empty-state" Visible="false">
-                <i class="bi bi-bag-check me-1"></i>
-                <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">No hay pedidos pendientes.</p>
+                <i class="bi bi-bag-check"></i>
+                <p>No hay pedidos pendientes.</p>
             </asp:Panel>
 
             <!-- Esto lo hizo claude code ↓ -->

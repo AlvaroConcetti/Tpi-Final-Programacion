@@ -12,52 +12,85 @@ using static System.Net.WebRequestMethods;
 
 namespace CatalogoWEB
 {
-    public partial class AgregarArticulo : System.Web.UI.Page
+    public partial class AgregarArticulo : PaginaAdmin
     {
         ConsultasArticulo consultasArticulo = new ConsultasArticulo();
         ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
 
+        // True si se llego con ?Id= (editar); false si es un alta. Lo usa el markup para titulos y textos.
+        protected bool EsEdicion
+        {
+            get { return Request.QueryString["Id"] != null; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             txtBoxId.Enabled = false;
+
+            // TextBox multilinea no renderiza MaxLength como atributo: se agrega a mano para limitar en el navegador.
+            txtBoxDescripcion.Attributes["maxlength"] = "150";
 
             if (!IsPostBack)
             {
+                CargarDesplegables();
+
                 // Si la redireccion trajo un parametro "Id" por URL, entra y precarga los campos para editarlos.
-                if (Request.QueryString["Id"] != null)
+                if (EsEdicion)
                 {
-                    btnAceptar.Text = "Editar";
+                    btnAceptar.Text = "Guardar cambios";
 
                     int idArticulo = int.Parse(Request.QueryString["id"]);
                     List<Articulo> articulos = consultasCatalogo.ListarArticulo();
                     Articulo articuloSeleccionado = articulos.Find(x => x.Id == idArticulo);
 
                     txtBoxId.Text = articuloSeleccionado.Id.ToString();
-                    txtBoxPrecio.Text = articuloSeleccionado.Precio.ToString("N2");
+                    // "0.##" (sin separador de miles): con cultura es-AR "N2" daba "1.500,00",
+                    // que no pasa la validacion del precio (^\d+(,\d{1,2})?$) y no dejaba guardar.
+                    txtBoxPrecio.Text = articuloSeleccionado.Precio.ToString("0.##");
                     txtBoxStock.Text = articuloSeleccionado.Stock.ToString();
                     txtBoxNombre.Text = articuloSeleccionado.Nombre;
                     txtBoxDescripcion.Text = articuloSeleccionado.Descripcion;
-                    txtBoxMarca.Text = articuloSeleccionado.Marca;
-                    txtBoxCategoria.Text = articuloSeleccionado.Categoria;
+                    SeleccionarOpcion(ddlMarca, articuloSeleccionado.Marca);
+                    SeleccionarOpcion(ddlCategoria, articuloSeleccionado.Categoria);
                     txtBoxCodigo.Text = articuloSeleccionado.Codigo;
-                    
+
                     if (!string.IsNullOrWhiteSpace(articuloSeleccionado.UrlImagen))
                     {
                         imgArticulo.ImageUrl = articuloSeleccionado.UrlImagen;
                     }
-                    else
-                    {
-                        imgArticulo.ImageUrl = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
-                    }
                 }
             }
+        }
+
+        // Llena los desplegables con las marcas y categorias existentes (ordenadas) + una opcion vacia inicial.
+        // El value es la descripcion porque AgregarArticuloSP/ModificarArticuloSP reciben la marca/categoria como texto.
+        private void CargarDesplegables()
+        {
+            ddlMarca.Items.Clear();
+            ddlMarca.Items.Add(new ListItem("Elegí una marca", ""));
+            foreach (Marca marca in consultasCatalogo.ListarMarcas().OrderBy(m => m.Descripcion))
+                ddlMarca.Items.Add(new ListItem(marca.Descripcion, marca.Descripcion));
+
+            ddlCategoria.Items.Clear();
+            ddlCategoria.Items.Add(new ListItem("Elegí una categoría", ""));
+            foreach (Categoria categoria in consultasCatalogo.ListarCategorias().OrderBy(c => c.Descripcion))
+                ddlCategoria.Items.Add(new ListItem(categoria.Descripcion, categoria.Descripcion));
+        }
+
+        // Selecciona la opcion con ese texto; si no existe en la lista (dato viejo), la agrega para no perderla.
+        private void SeleccionarOpcion(DropDownList ddl, string valor)
+        {
+            if (string.IsNullOrWhiteSpace(valor))
+                return;
+
+            ListItem item = ddl.Items.FindByValue(valor);
+            if (item == null)
+            {
+                item = new ListItem(valor, valor);
+                ddl.Items.Add(item);
+            }
+            ddl.ClearSelection();
+            item.Selected = true;
         }
 
         protected void btnAceptar_Click(object sender, EventArgs e)
@@ -97,8 +130,8 @@ namespace CatalogoWEB
 
                 articuloNuevo.Nombre = txtBoxNombre.Text;
                 articuloNuevo.Descripcion = txtBoxDescripcion.Text;
-                articuloNuevo.Marca = txtBoxMarca.Text;
-                articuloNuevo.Categoria = txtBoxCategoria.Text;
+                articuloNuevo.Marca = ddlMarca.SelectedValue;
+                articuloNuevo.Categoria = ddlCategoria.SelectedValue;
                 articuloNuevo.Codigo = txtBoxCodigo.Text;
 
                 Articulo articuloExistente = null;

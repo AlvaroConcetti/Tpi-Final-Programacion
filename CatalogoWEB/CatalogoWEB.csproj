@@ -171,6 +171,7 @@
     <Compile Include="Registrarse.aspx.designer.cs">
       <DependentUpon>Registrarse.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PaginaAdmin.cs" />
     <Compile Include="Validacion.cs" />
     <Compile Include="Ventas.aspx.cs">
       <DependentUpon>Ventas.aspx</DependentUpon>

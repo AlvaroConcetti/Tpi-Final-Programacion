@@ -9,20 +9,13 @@ using Dominio;
 
 namespace CatalogoWEB
 {
-    public partial class Administracion : System.Web.UI.Page
+    public partial class Administracion : PaginaAdmin
     {
         ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
         ConsultasArticulo consultasArticulo = new ConsultasArticulo();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             ddlCriterio.Enabled = true;
 
             if (!IsPostBack)
@@ -72,12 +65,6 @@ namespace CatalogoWEB
         protected void btnAgregarArticulo_Click(object sender, EventArgs e)
         {
             Response.Redirect("AgregarArticulo.aspx", false);
-        }
-
-        // Redireccion para administrar las marcas y categorias.
-        protected void btnCategoriasMarcas_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("CategoriasMarcas.aspx", false);
         }
 
         // Manejar los botones del dgv (editar o eliminar).
@@ -134,21 +121,25 @@ namespace CatalogoWEB
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                LinkButton btnEliminar = (LinkButton)e.Row.Cells[8].Controls[0];
+                LinkButton btnEliminar = (LinkButton)e.Row.Cells[7].Controls[0];
                 btnEliminar.OnClientClick = "return mostrarModalEliminarArticulo(event, this);";
 
-                // Indicador de stock: ⚠️ si esta bajo (1 a 5), 🚨 + fila en rojo si esta en 0.
+                // Indicador de stock como etiqueta: "Sin stock" (0, fila atenuada), "N · Bajo" (1 a 5) o el numero.
                 int stock;
-                if (int.TryParse(e.Row.Cells[3].Text, out stock))
+                if (int.TryParse(e.Row.Cells[5].Text, out stock))
                 {
                     if (stock == 0)
                     {
-                        e.Row.Cells[3].Text = "🚨 " + stock;
+                        e.Row.Cells[5].Text = "<span class=\"stock-badge stock-badge--cero\">Sin stock</span>";
                         e.Row.CssClass = (e.Row.CssClass + " fila-sin-stock").Trim();
                     }
                     else if (stock <= 5)
                     {
-                        e.Row.Cells[3].Text = "⚠️ " + stock;
+                        e.Row.Cells[5].Text = "<span class=\"stock-badge stock-badge--bajo\">" + stock + " · Bajo</span>";
+                    }
+                    else
+                    {
+                        e.Row.Cells[5].Text = "<span class=\"stock-badge\">" + stock + "</span>";
                     }
                 }
             }

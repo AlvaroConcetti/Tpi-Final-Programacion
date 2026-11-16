@@ -7,14 +7,12 @@
 
     <div class="page-header">
         <div>
-            <h1 class="page-title">Administración</h1>
+            <h1 class="page-title">Artículos</h1>
             <p class="page-subtitle">Gestioná los artículos del catálogo</p>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <asp:Button ID="btnAgregarArticulo" Text="+ Agregar artículo" runat="server"
+        <div class="page-actions">
+            <asp:Button ID="btnAgregarArticulo" Text="Agregar artículo" runat="server"
                 OnClick="btnAgregarArticulo_Click" CssClass="btn-primary" />
-            <asp:Button ID="btnCategoriasMarcas" Text="Categorías y Marcas" runat="server"
-                OnClick="btnCategoriasMarcas_Click" CssClass="btn-outline" />
         </div>
     </div>
 
@@ -22,18 +20,19 @@
         <ContentTemplate>
 
             <!-- Barra de busqueda rapida -->
-            <div class="search-bar">
-                <asp:TextBox ID="txtBoxFiltrar" runat="server" CssClass="form-control"
-                    placeholder="Buscar por nombre..." AutoPostBack="true"
-                    OnTextChanged="txtBoxFiltrar_TextChanged" MaxLength="20" />
-                <asp:Button ID="btnBorrarFiltro" Text="Limpiar" runat="server"
-                    OnClick="btnBorrarFiltro_Click" CssClass="btn-outline" />
-                <div class="d-flex align-items-center gap-2 ms-1">
+            <div class="admin-search">
+                <div class="search-pill">
+                    <i class="bi bi-search"></i>
+                    <asp:TextBox ID="txtBoxFiltrar" runat="server" CssClass="form-control"
+                        placeholder="Buscar por nombre" AutoPostBack="true"
+                        OnTextChanged="txtBoxFiltrar_TextChanged" MaxLength="20" />
                 </div>
+                <asp:Button ID="btnBorrarFiltro" Text="Limpiar" runat="server"
+                    OnClick="btnBorrarFiltro_Click" CssClass="btn-ghost" />
             </div>
 
             <!-- Filtro avanzado -->
-            <div class="filter-bar mb-3">
+            <div class="filter-bar mb-4">
                 <div class="row g-3 align-items-end">
                     <div class="col-auto">
                         <asp:Label Text="Filtrar por" runat="server" ID="lblDdlFiltrar" CssClass="form-label" />
@@ -54,7 +53,7 @@
                         <asp:TextBox runat="server" ID="txtBoxFiltrarAvanzado" Visible="true" CssClass="form-control" />
                     </div>
 
-                    <div class="col-auto">
+                    <div class="col-auto d-flex gap-2">
                         <asp:Button ID="btnFiltrar" Text="Aplicar" runat="server"
                             OnClick="btnFiltrar_Click" CssClass="btn-primary" />
                         <asp:Button ID="btnLimpiarFiltroAvanzado" Text="Limpiar" runat="server"
@@ -74,16 +73,28 @@
                         AllowPaging="true" PageSize="5"
                         PagerStyle-CssClass="gridview-pager"
                         PagerStyle-HorizontalAlign="Center">
+                        <%-- El orden de las columnas importa: el code-behind lee Cells[0] (Id), Cells[5] (Stock) y Cells[7] (Eliminar) --%>
                         <Columns>
                             <asp:BoundField HeaderText="Id" DataField="Id" HeaderStyle-CssClass="oculto" ItemStyle-CssClass="oculto" />
-                            <asp:BoundField HeaderText="Código" DataField="Codigo" />
-                            <asp:BoundField HeaderText="Precio" DataField="Precio" DataFormatString="{0:N2}" />
-                            <asp:BoundField HeaderText="Stock" DataField="Stock" />
-                            <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
-                            <asp:BoundField HeaderText="Marca" DataField="Marca" />
+                            <asp:TemplateField HeaderText="Artículo">
+                                <ItemTemplate>
+                                    <div class="grid-product">
+                                        <span class="grid-thumb">
+                                            <img src='<%#: Eval("UrlImagen") %>' alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
+                                        </span>
+                                        <span class="grid-product-text">
+                                            <span class="grid-product-name"><%#: Eval("Nombre") %></span>
+                                            <span class="grid-product-code"><%#: Eval("Codigo") %></span>
+                                        </span>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                             <asp:BoundField HeaderText="Categoría" DataField="Categoria" />
-                            <asp:ButtonField HeaderText="" CommandName="Editar" Text="Editar" ControlStyle-CssClass="btn-select" />
-                            <asp:ButtonField HeaderText="" CommandName="Eliminar" Text="Eliminar" ControlStyle-CssClass="btn-select" />
+                            <asp:BoundField HeaderText="Marca" DataField="Marca" />
+                            <asp:BoundField HeaderText="Precio" DataField="Precio" DataFormatString="${0:N2}" ItemStyle-CssClass="grid-num" />
+                            <asp:BoundField HeaderText="Stock" DataField="Stock" />
+                            <asp:ButtonField HeaderText="" CommandName="Editar" Text="Editar" ControlStyle-CssClass="btn-select" ItemStyle-CssClass="grid-action" />
+                            <asp:ButtonField HeaderText="" CommandName="Eliminar" Text="Eliminar" ControlStyle-CssClass="btn-select btn-select--danger" ItemStyle-CssClass="grid-action" />
                         </Columns>
                     </asp:GridView>
                 </div>

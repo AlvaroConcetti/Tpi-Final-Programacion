@@ -5,13 +5,16 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager runat="server" />
 
+    <div class="back-row">
+        <asp:Button ID="btnVolverVentas" Text="← Volver a Ventas" runat="server"
+            OnClick="btnVolverVentas_Click" CssClass="btn-ghost" CausesValidation="false" />
+    </div>
+
     <div class="page-header">
         <div>
             <h1 class="page-title">Pedidos cancelados</h1>
             <p class="page-subtitle">Reactivalos o borralos definitivamente</p>
         </div>
-        <asp:Button ID="btnVolverVentas" Text="← Volver a Ventas" runat="server"
-            OnClick="btnVolverVentas_Click" CssClass="btn-ghost" CausesValidation="false" />
     </div>
 
     <asp:UpdatePanel runat="server">
@@ -57,8 +60,8 @@
             </asp:Repeater>
 
             <asp:Panel ID="pnlVacio" runat="server" CssClass="empty-state" Visible="false">
-                <i class="bi bi-bag-x me-1"></i>
-                <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">No hay pedidos cancelados.</p>
+                <i class="bi bi-bag-x"></i>
+                <p>No hay pedidos cancelados.</p>
             </asp:Panel>
 
             <!-- Esto lo hizo claude code ↓ -->

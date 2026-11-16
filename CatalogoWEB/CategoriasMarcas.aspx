@@ -7,17 +7,15 @@
 
     <div class="page-header">
         <div>
-            <h1 class="page-title">Categorías y Marcas</h1>
+            <h1 class="page-title">Categorías y marcas</h1>
             <p class="page-subtitle">Gestioná las categorías y marcas del catálogo</p>
         </div>
-        <asp:Button ID="btnVolverAdmin" Text="← Volver a Administración" runat="server"
-            OnClick="btnVolverAdmin_Click" CssClass="btn-ghost" CausesValidation="false" />
     </div>
 
     <!-- Esto lo hizo claude code -->
     <!-- Alerta cuando se intenta eliminar una marca/categoria que todavia esta en uso -->
     <div id="toastAlerta" class="toast-notification toast-notification--error">
-        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+        <i class="bi bi-exclamation-triangle-fill"></i>
         <span class="toast-text"></span>
     </div>
     <script type="text/javascript">
@@ -36,7 +34,7 @@
     <!-- Esto lo hizo claude code -->
     <!-- Notificacion pasiva al guardar la edicion de una marca o categoria -->
     <div id="toastCarrito" class="toast-notification">
-        <i class="bi bi-check-circle-fill me-1"></i>
+        <i class="bi bi-check-circle-fill"></i>
         <span class="toast-text"></span>
     </div>
     <script type="text/javascript">
@@ -56,12 +54,12 @@
         <ContentTemplate>
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="panel" style="padding: 1.25rem;">
-                        <h2 style="font-size: 16px; margin: 0 0 1rem;">Marcas</h2>
+                    <div class="form-card h-100">
+                        <h2 class="form-card-title">Marcas</h2>
 
-                        <div class="d-flex gap-2 mb-3">
-                            <asp:TextBox ID="txtNuevaMarca" runat="server" CssClass="form-control" placeholder="Nueva marca..." MaxLength="50" />
-                            <asp:Button ID="btnAgregarMarca" runat="server" Text="+ Agregar" OnClick="btnAgregarMarca_Click" CssClass="btn-primary" CausesValidation="false" />
+                        <div class="admin-add-row">
+                            <asp:TextBox ID="txtNuevaMarca" runat="server" CssClass="form-control" placeholder="Nueva marca" MaxLength="50" />
+                            <asp:Button ID="btnAgregarMarca" runat="server" Text="Agregar" OnClick="btnAgregarMarca_Click" CssClass="btn-primary" CausesValidation="false" />
                         </div>
 
                         <asp:Repeater ID="repMarcas" runat="server" OnItemCommand="repMarcas_ItemCommand">
@@ -79,11 +77,11 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="panel" style="padding: 1.25rem;">
-                        <h2 style="font-size: 16px; margin: 0 0 1rem;">Categorías</h2>
-                        <div class="d-flex gap-2 mb-3">
-                            <asp:TextBox ID="txtNuevaCategoria" runat="server" CssClass="form-control" placeholder="Nueva categoría..." MaxLength="50" />
-                            <asp:Button ID="btnAgregarCategoria" runat="server" Text="+ Agregar" OnClick="btnAgregarCategoria_Click" CssClass="btn-primary" CausesValidation="false" />
+                    <div class="form-card h-100">
+                        <h2 class="form-card-title">Categorías</h2>
+                        <div class="admin-add-row">
+                            <asp:TextBox ID="txtNuevaCategoria" runat="server" CssClass="form-control" placeholder="Nueva categoría" MaxLength="50" />
+                            <asp:Button ID="btnAgregarCategoria" runat="server" Text="Agregar" OnClick="btnAgregarCategoria_Click" CssClass="btn-primary" CausesValidation="false" />
                         </div>
 
                         <asp:Repeater ID="repCategorias" runat="server" OnItemCommand="repCategorias_ItemCommand">

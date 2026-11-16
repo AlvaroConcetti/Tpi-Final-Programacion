@@ -9,19 +9,12 @@ using System.Web.UI.WebControls;
 
 namespace CatalogoWEB
 {
-    public partial class Ventas : System.Web.UI.Page
+    public partial class Ventas : PaginaAdmin
     {
         ConsultasVenta consultasVenta = new ConsultasVenta();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que los usuarios no tengan permiso aca.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             if (!IsPostBack)
             {
                 txtBoxTelefono.Text = consultasVenta.ObtenerTelefonoWhatsApp();

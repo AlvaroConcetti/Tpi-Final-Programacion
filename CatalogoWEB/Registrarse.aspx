@@ -5,11 +5,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="auth-wrapper">
-        <div class="auth-card">
+        <!-- DefaultButton: Enter en los campos envia este formulario (y no el boton de sesion del navbar) -->
+        <asp:Panel runat="server" CssClass="auth-card" DefaultButton="btnCrearCuenta">
 
             <!-- Encabezados -->
-            <h2 class="auth-title">Crear cuenta</h2>
-            <p class="auth-sub">Completá tus datos para registrarte</p>
+            <div class="auth-mark">Catálogo</div>
+            <h1 class="auth-title">Creá tu cuenta</h1>
+            <p class="auth-sub">Con tu cuenta podés guardar favoritos y enviar pedidos.</p>
 
             <!-- TextBox de correo electronico con sus validaciones en el front -->
             <div class="mb-3">
@@ -47,17 +49,18 @@
             </div>
 
             <!-- Boton de crear cuenta -->
-            <asp:Button ID="btnCrearCuenta" runat="server" Text="Crear cuenta"
-                CssClass="btn-primary" OnClick="btnCrearCuenta_Click"
-                Style="width: 100%; padding: 0.6rem;" />
+            <div class="auth-actions">
+                <asp:Button ID="btnCrearCuenta" runat="server" Text="Crear cuenta"
+                    CssClass="btn-primary" OnClick="btnCrearCuenta_Click" />
+            </div>
             <asp:Label Text="" runat="server" ID="lblMensajeValidacion"
-                CssClass="validation-error" Style="margin-top: 0.5rem; text-align: center;" />
+                CssClass="validation-error auth-message" />
 
             <div class="auth-footer">
                 ¿Ya tenés cuenta? <a href="Login.aspx">Iniciá sesión</a>
             </div>
 
-        </div>
+        </asp:Panel>
     </div>
 
 </asp:Content>

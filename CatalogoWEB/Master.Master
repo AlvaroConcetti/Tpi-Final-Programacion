@@ -8,102 +8,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Catálogo</title>
     <asp:ContentPlaceHolder ID="head" runat="server" />
-    <!-- Fuentes -->
+    <!-- Fuente: Archivo (grotesca con eje de ancho, se usa condensada en titulos) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5 -->
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 (solo grilla y utilidades) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Estilos del sitio -->
-    <link href="Content/catalogo.css?v=20" rel="stylesheet" />
-    <!-- Iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="Content/catalogo.css?v=32" rel="stylesheet" />
 </head>
 <body>
     <form id="form1" runat="server">
 
-        <nav class="site-nav">
-            <a class="nav-brand" href="Default.aspx">Catálogo | Alvaro Concetti</a>
-            <div class="nav-divider"></div>
-            <div class="nav-links">
-                <a class="nav-link-item" href="Default.aspx">
-                    <i class="bi bi-grid-3x3-gap me-1"></i>Catálogo
-                </a>
-                <a class="nav-link-item" href="Favoritos.aspx">
-                    <i class="bi bi-heart me-1"></i>Favoritos
-                </a>
-                <a class="nav-link-item" href="Carrito.aspx">
-                    <i class="bi bi-cart me-1"></i>Mi carrito
-                </a>
-                <!-- Para que aparezcan esos datos en el navbar debera ser admin -->
-                <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
-                    {%>
-                <a class="nav-link-item" href="Administracion.aspx">
-                    <i class="bi bi-sliders me-1"></i>Administración
-                </a>
-                <a class="nav-link-item" href="Ventas.aspx">
-                    <i class="bi bi-receipt me-1"></i>Ventas
-                </a>
-                <a class="nav-link-item" href="Dashboard.aspx">
-                    <i class="bi bi-bar-chart-line me-1"></i>Dashboard
-                </a>
-                <%}%>
+        <!-- Barra superior fina: integrantes del grupo, accesos de admin y sesion -->
+        <div class="topbar">
+            <div class="topbar-inner">
+                <span class="topbar-sign">
+                    <span>Alvaro Concetti</span>
+                    <span>Nicolas Diaz</span>
+                    <span>Vicente Guillen</span>
+                </span>
+                <div class="topbar-links">
+                    <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
+                        {%>
+                    <a class="topbar-link topbar-link--admin" href="Administracion.aspx">Administración</a>
+                    <span class="topbar-sep topbar-link--admin">|</span>
+                    <a class="topbar-link topbar-link--admin" href="Ventas.aspx">Ventas</a>
+                    <span class="topbar-sep topbar-link--admin">|</span>
+                    <a class="topbar-link topbar-link--admin" href="Dashboard.aspx">Dashboard</a>
+                    <span class="topbar-sep topbar-link--admin">|</span>
+                    <%}%>
+                    <asp:Button Text="Iniciar sesión" CausesValidation="false" runat="server" ID="btnLogin"
+                        CssClass="topbar-link topbar-btn" Visible="true" OnClick="btnLogin_Click" />
+                    <asp:Button Text="Cerrar sesión" runat="server" ID="btnCerrarSesion"
+                        CssClass="topbar-link topbar-btn" Visible="false" OnClick="btnCerrarSesion_Click" CausesValidation="false" />
+                </div>
             </div>
-            <div class="nav-actions">
-                <asp:Button Text="Iniciar sesión" CausesValidation="false" runat="server" ID="btnLogin"
-                    CssClass="btn-primary" Visible="true" OnClick="btnLogin_Click" />
-                <asp:Button Text="Cerrar sesión" runat="server" ID="btnCerrarSesion"
-                    CssClass="btn-ghost" Visible="false" OnClick="btnCerrarSesion_Click" CausesValidation="false" />
+        </div>
+
+        <!-- Barra principal: marca a la izquierda, navegacion centrada -->
+        <header class="site-nav">
+            <a class="nav-brand" href="Default.aspx">Catálogo</a>
+
+            <nav class="nav-links">
+                <a class="nav-link-item <%= Activo("Default.aspx", "Detalle.aspx") %>" href="Default.aspx">Catálogo</a>
+                <a class="nav-link-item <%= Activo("Favoritos.aspx") %>" href="Favoritos.aspx">Favoritos</a>
+                <a class="nav-link-item <%= Activo("Carrito.aspx", "Historial.aspx") %>" href="Carrito.aspx">Mi carrito</a>
+            </nav>
+
+            <!-- En mobile la navegacion pasa a iconos + menu hamburguesa -->
+            <div class="nav-icons">
+                <a class="nav-icon" href="Favoritos.aspx" aria-label="Favoritos"><i class="bi bi-heart"></i></a>
+                <a class="nav-icon" href="Carrito.aspx" aria-label="Mi carrito"><i class="bi bi-bag"></i></a>
+                <button class="nav-hamburger" id="btnHamburguesa" type="button" onclick="toggleMenu()" aria-label="Abrir menú">
+                    <span class="ham-bar ham-bar--top"></span>
+                    <span class="ham-bar ham-bar--mid"></span>
+                    <span class="ham-bar ham-bar--bot"></span>
+                </button>
             </div>
+        </header>
 
-            <!-- Esto lo hizo claude code ↓ -->
-            <!-- Botón hamburguesa: 3 barras que animan a X (visible sólo en ≤991px via CSS) -->
-            <button class="nav-hamburger" id="btnHamburguesa" type="button" onclick="toggleMenu()" aria-label="Abrir menú">
-                <span class="ham-bar ham-bar--top"></span>
-                <span class="ham-bar ham-bar--mid"></span>
-                <span class="ham-bar ham-bar--bot"></span>
-            </button>
-        </nav>
-
-        <!-- Esto lo hizo claude code ↓ -->
-        <!-- Menú mobile: visibilidad controlada por clase CSS .is-open -->
+        <!-- Menu mobile: visibilidad controlada por la clase .nav-open -->
         <div class="nav-mobile-menu" id="navMobileMenu">
-            <a class="nav-link-item" href="Default.aspx">
-                <i class="bi bi-grid-3x3-gap me-1"></i>Catálogo
-            </a>
-            <a class="nav-link-item" href="Favoritos.aspx">
-                <i class="bi bi-heart me-1"></i>Favoritos
-            </a>
-            <a class="nav-link-item" href="Carrito.aspx">
-                <i class="bi bi-cart me-1"></i>Mi carrito
-            </a>
+            <a class="nav-link-item" href="Default.aspx">Catálogo</a>
+            <a class="nav-link-item" href="Favoritos.aspx">Favoritos</a>
+            <a class="nav-link-item" href="Carrito.aspx">Mi carrito</a>
             <%if (Consultas.Seguridad.Admin(Session["Usuario"]))
                 {%>
-            <a class="nav-link-item" href="Administracion.aspx">
-                <i class="bi bi-sliders me-1"></i>Administración
-            </a>
-            <a class="nav-link-item" href="Ventas.aspx">
-                <i class="bi bi-receipt me-1"></i>Ventas
-            </a>
-            <a class="nav-link-item" href="Dashboard.aspx">
-                <i class="bi bi-bar-chart-line me-1"></i>Dashboard
-            </a>
+            <span class="nav-mobile-label">Administración</span>
+            <a class="nav-link-item" href="Administracion.aspx">Artículos</a>
+            <a class="nav-link-item" href="Ventas.aspx">Ventas</a>
+            <a class="nav-link-item" href="Dashboard.aspx">Dashboard</a>
             <%}%>
         </div>
 
-        <div class="main-content">
+        <!-- Barra local del panel de administracion: solo en las paginas de admin (y solo las ve un admin,
+             porque esas paginas heredan de PaginaAdmin y redirigen a cualquier otro usuario) -->
+        <%if (EsPaginaAdmin)
+            {%>
+        <nav class="admin-nav" aria-label="Secciones de administración">
+            <div class="admin-nav-inner">
+                <span class="admin-nav-title">Administración</span>
+                <div class="admin-nav-links">
+                    <a class="admin-nav-link <%= Activo("Dashboard.aspx") %>" href="Dashboard.aspx">Dashboard</a>
+                    <a class="admin-nav-link <%= Activo("Administracion.aspx", "AgregarArticulo.aspx") %>" href="Administracion.aspx">Artículos</a>
+                    <a class="admin-nav-link <%= Activo("CategoriasMarcas.aspx") %>" href="CategoriasMarcas.aspx">Categorías y marcas</a>
+                    <a class="admin-nav-link <%= Activo("Ventas.aspx", "PedidosCancelados.aspx") %>" href="Ventas.aspx">Ventas</a>
+                </div>
+            </div>
+        </nav>
+        <%}%>
+
+        <main class="main-content">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" />
-        </div>
+        </main>
 
     </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    
-    <!-- Esto lo hizo claude code ↓ -->
+
     <script>
-        // Hace que toda la card sea clickeable (Catalogo y Mi carrito), salvo los
-        // controles marcados con .no-card-click (botones, dropdown, corazon de favoritos).
+        // Hace que toda la card sea clickeable (Catalogo, Favoritos y Mi carrito), salvo los
+        // controles marcados con .no-card-click (botones, stepper, corazon de favoritos).
         // Dispara el click en un boton oculto (.card-click-target) que hace el postback real.
         function clickCard(evt, card) {
             if (evt.target.closest('.no-card-click')) return;
@@ -114,8 +121,6 @@
         function toggleMenu() {
             var menu = document.getElementById('navMobileMenu');
             var btn = document.getElementById('btnHamburguesa');
-            // .nav-open muestra el menú (tiene mayor especificidad que display:none !important)
-            // .is-open anima las barras del botón → X
             menu.classList.toggle('nav-open');
             btn.classList.toggle('is-open');
         }

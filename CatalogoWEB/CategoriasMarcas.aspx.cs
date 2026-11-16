@@ -9,19 +9,12 @@ using System.Web.UI.WebControls;
 
 namespace CatalogoWEB
 {
-    public partial class CategoriasMarcas : System.Web.UI.Page
+    public partial class CategoriasMarcas : PaginaAdmin
     {
         ConsultasCatalogo consultasCatalogo = new ConsultasCatalogo();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
-            if (Seguridad.Admin(Session["Usuario"]) == false)
-            {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
-                Response.Redirect("Error.aspx", false);
-            }
-
             if (!IsPostBack)
             {
                 CargarListas();
@@ -44,12 +37,6 @@ namespace CatalogoWEB
                 Session.Add("Error", ex);
                 Response.Redirect("Error.aspx", false);
             }
-        }
-
-        // Redireccion para administracion.
-        protected void btnVolverAdmin_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("Administracion.aspx", false);
         }
 
         // Boton para agregar Marca.

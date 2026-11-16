@@ -24,15 +24,6 @@ namespace CatalogoWEB
         protected global::System.Web.UI.WebControls.Button btnAgregarArticulo;
 
         /// <summary>
-        /// btnCategoriasMarcas control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCategoriasMarcas;
-
-        /// <summary>
         /// txtBoxFiltrar control.
         /// </summary>
         /// <remarks>
