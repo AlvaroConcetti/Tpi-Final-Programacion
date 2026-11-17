@@ -13,7 +13,8 @@ Hecho en **ASP.NET Web Forms (.NET Framework 4.8)** con **SQL Server**.
 - Agregar artículos a favoritos.
 - Carrito de compras: sumar o restar unidades sin pasarse del stock.
 - Iniciar la compra: se genera un pedido y se manda por WhatsApp al comercio.
-- Ver el historial de compras confirmadas.
+- Mis pedidos: ver todos los pedidos con su estado (pendiente, confirmado o cancelado) y reenviar por WhatsApp los pendientes.
+- Consultar por WhatsApp desde el detalle de un artículo, sin necesidad de tener cuenta.
 
 **Administrador**
 - ABM de artículos (con imagen) y filtro avanzado por código, precio, marca o categoría.
@@ -47,6 +48,7 @@ Hecho en **ASP.NET Web Forms (.NET Framework 4.8)** con **SQL Server**.
    7. `Seguridad_HashContrasenas.sql`
    8. `Perfil.sql`
    9. `Bajas_Logicas.sql`
+   10. `Mis_Pedidos.sql`
 3. Revisar la cadena de conexión en `CatalogoWEB/Web.config` (`CadenaConexion`). Por defecto usa `.\SQLEXPRESS` con autenticación de Windows.
 4. Poner `CatalogoWEB` como proyecto de inicio y ejecutar (F5).
 

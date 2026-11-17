@@ -219,17 +219,13 @@ namespace CatalogoWEB
                 Usuario usuarioLogueado = (Usuario)Session["Usuario"];
                 int idPedido = consultasVenta.CrearPedido(usuarioLogueado.Id);
 
-                StringBuilder mensaje = new StringBuilder();
-                mensaje.AppendLine("Hola! Quiero confirmar mi pedido #" + idPedido + ":");
-
-                decimal total = 0;
+                List<DetallePedido> lineas = new List<DetallePedido>();
                 try
                 {
                     foreach (ItemCarrito item in carrito)
                     {
                         consultasVenta.AgregarDetallePedido(idPedido, item.Articulo.Id, item.Cantidad, item.Articulo.Precio);
-                        mensaje.AppendLine("- " + item.Articulo.Nombre + " x" + item.Cantidad + " ($" + item.Subtotal.ToString("N2") + ")");
-                        total += item.Subtotal;
+                        lineas.Add(new DetallePedido { Articulo = item.Articulo, Cantidad = item.Cantidad, PrecioUnitario = item.Articulo.Precio });
                     }
                 }
                 catch (Exception)
@@ -240,13 +236,10 @@ namespace CatalogoWEB
                     consultasVenta.EliminarPedidoDefinitivo(idPedido);
                     throw;
                 }
-                mensaje.AppendLine("Total: $" + total.ToString("N2"));
-
                 Session.Remove("CarritoEnSession");
 
-                // Con esto derivamos el pedido a whatsapp.
-                string urlWhatsApp = "https://wa.me/" + numeroWhatsApp + "?text=" + HttpUtility.UrlEncode(mensaje.ToString());
-                Response.Redirect(urlWhatsApp, false);
+                // Con esto derivamos el pedido a whatsapp (el mensaje lo arma WhatsApp.cs).
+                Response.Redirect(WhatsApp.LinkPedido(numeroWhatsApp, idPedido, lineas), false);
             }
             catch (Exception ex)
             {

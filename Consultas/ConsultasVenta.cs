@@ -169,14 +169,15 @@ namespace Consultas
             }
         }
 
-        public List<Pedido> ListarComprasConfirmadas(int idUser)
+        // Todos los pedidos del cliente (pendientes, confirmados y cancelados), del mas nuevo al mas viejo.
+        public List<Pedido> ListarPedidosPorUsuario(int idUser)
         {
             List<Pedido> lista = new List<Pedido>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearProcedimiento("ListarPedidosConfirmadosPorUsuarioSP");
+                datos.setearProcedimiento("ListarPedidosPorUsuarioSP");
                 datos.setearParametro("@idUser", idUser);
                 datos.ejecutarLectura();
 
@@ -199,7 +200,6 @@ namespace Consultas
 
                 return lista;
             }
-
             finally
             {
                 datos.cerrarConexion();

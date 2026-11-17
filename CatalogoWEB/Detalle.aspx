@@ -27,6 +27,14 @@
                         <%: ArticuloSeleccionado.Stock == 0 ? "Sin stock" : (ArticuloSeleccionado.Stock <= 5 ? "Últimas unidades · " + ArticuloSeleccionado.Stock + " en stock" : ArticuloSeleccionado.Stock + " en stock") %>
                     </p>
 
+                    <%if (LinkConsulta != "")
+                        {%>
+                    <a class="btn-primary pdp-cta" href="<%: LinkConsulta %>" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp"></i>Consultar por WhatsApp
+                    </a>
+                    <p class="pdp-cta-nota">Se abre WhatsApp con tu consulta ya escrita.</p>
+                    <%}%>
+
                     <p class="pdp-desc"><%: ArticuloSeleccionado.Descripcion %></p>
 
                     <%if (!string.IsNullOrEmpty(ArticuloSeleccionado.Codigo))

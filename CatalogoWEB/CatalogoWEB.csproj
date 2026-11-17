@@ -89,6 +89,8 @@
     <Content Include="ImportarArticulos.aspx" />
     <Content Include="Perfil.aspx" />
     <Content Include="bdd-catalogoweb\Perfil.sql" />
+    <Content Include="bdd-catalogoweb\Bajas_Logicas.sql" />
+    <Content Include="bdd-catalogoweb\Mis_Pedidos.sql" />
     <Content Include="bdd-catalogoweb\Seguridad_HashContrasenas.sql" />
     <Content Include="Content\plantilla_articulos.csv" />
     <Content Include="bdd-catalogoweb\PedidosCancelados.sql" />
@@ -177,6 +179,7 @@
       <DependentUpon>Registrarse.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginaAdmin.cs" />
+    <Compile Include="WhatsApp.cs" />
     <Compile Include="Validacion.cs" />
     <Compile Include="Ventas.aspx.cs">
       <DependentUpon>Ventas.aspx</DependentUpon>

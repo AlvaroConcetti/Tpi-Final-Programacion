@@ -11,9 +11,21 @@ namespace CatalogoWEB
     public partial class Detalle : System.Web.UI.Page
     {
         public Articulo ArticuloSeleccionado { get; set; }
+
+        // Link de "Consultar por WhatsApp" (vacio si el comercio todavia no configuro su numero).
+        protected string LinkConsulta { get; private set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             ArticuloSeleccionado = (Articulo)Session["ArticuloSeleccionado"];
+
+            LinkConsulta = "";
+            if (ArticuloSeleccionado != null)
+            {
+                string telefono = new Consultas.ConsultasVenta().ObtenerTelefonoWhatsApp();
+                if (!string.IsNullOrWhiteSpace(telefono))
+                    LinkConsulta = WhatsApp.LinkConsulta(telefono, ArticuloSeleccionado);
+            }
 
             // Modifica el texto del boton segun corresponda.
             if ((string)Session["Origen"] == "Favoritos.aspx")

@@ -15,7 +15,7 @@
             <h1 class="page-title">Mi carrito</h1>
             <p class="page-subtitle">Revisá tus artículos antes de enviar el pedido</p>
         </div>
-        <asp:Button ID="btnVerHistorial" Text="Ver historial de compras" runat="server"
+        <asp:Button ID="btnVerHistorial" Text="Ver mis pedidos" runat="server"
             OnClick="btnVerHistorial_Click" CssClass="btn-outline" />
     </div>
 
