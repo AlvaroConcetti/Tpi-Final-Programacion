@@ -46,6 +46,7 @@ Hecho en **ASP.NET Web Forms (.NET Framework 4.8)** con **SQL Server**.
    6. `PedidosCancelados.sql`
    7. `Seguridad_HashContrasenas.sql`
    8. `Perfil.sql`
+   9. `Bajas_Logicas.sql`
 3. Revisar la cadena de conexión en `CatalogoWEB/Web.config` (`CadenaConexion`). Por defecto usa `.\SQLEXPRESS` con autenticación de Windows.
 4. Poner `CatalogoWEB` como proyecto de inicio y ejecutar (F5).
 
@@ -64,4 +65,5 @@ UPDATE USERS SET admin = 1 WHERE email = 'tu@email.com'
 - Todas las consultas usan parámetros, para evitar inyección SQL.
 - Los textos que cargan los usuarios se muestran codificados (`<%#: %>`), para evitar que se inyecte HTML o JavaScript.
 - Las imágenes que se suben solo pueden ser JPG, PNG o WEBP de hasta 2 MB.
+- Los artículos se dan de baja en forma lógica (`Activo = 0`): dejan de verse en el catálogo, pero los pedidos ya hechos los conservan, así el historial y las ventas no cambian.
 - Los errores muestran un mensaje genérico, y no el detalle técnico.

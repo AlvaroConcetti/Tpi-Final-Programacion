@@ -16,7 +16,7 @@ namespace CatalogoWEB
         {
             if (!Seguridad.Admin(Session["Usuario"]))
             {
-                Session.Add("Error", "No tienes permisos para ingresar aqui.");
+                Session.Add("Error", "No tenés permisos para ingresar a esta sección.");
                 Response.Redirect("Error.aspx", true);
             }
 

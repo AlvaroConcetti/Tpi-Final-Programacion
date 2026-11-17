@@ -21,7 +21,7 @@ namespace CatalogoWEB
             // Barrera de seguridad para que no puedan entrar usuarios al panel administracion.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                lblParrafo.Text = "Inicie sesion para que pueda ver su carrito.";
+                lblParrafo.Text = "Iniciá sesión para ver tu carrito.";
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace CatalogoWEB
             pnlFooter.Visible = carrito.Count > 0;
 
             if (carrito.Count == 0)
-                lblParrafo.Text = "Tu carrito esta vacio.";
+                lblParrafo.Text = "Tu carrito está vacío.";
             else
                 lblParrafo.Text = "";
         }
@@ -196,7 +196,7 @@ namespace CatalogoWEB
         {
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para continuar la compra.");
+                Session.Add("Error", "Iniciá sesión para continuar la compra.");
                 Response.Redirect("Error.aspx", false);
                 return;
             }

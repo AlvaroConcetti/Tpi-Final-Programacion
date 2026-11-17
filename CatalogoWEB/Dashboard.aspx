@@ -148,7 +148,10 @@
             return true;
         }
 
-        if (!ocultarSiVacio(ventasPorDia, 'chartVentasPorDia', 'emptyVentasPorDia')) {
+        // Los dias sin ventas vienen rellenados con 0 (para que el grafico sea continuo):
+        // si todos son 0 se muestra el mensaje en vez de un grafico vacio.
+        var hayVentas = ventasPorDia.some(function (v) { return v.Total > 0; });
+        if (!ocultarSiVacio(hayVentas ? ventasPorDia : [], 'chartVentasPorDia', 'emptyVentasPorDia')) {
             new Chart(document.getElementById('chartVentasPorDia'), {
                 type: 'bar',
                 data: {

@@ -15,7 +15,7 @@
 
             <!-- TextBox de correo electronico con sus validaciones en el front -->
             <div class="mb-3">
-                <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" />
+                <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" AssociatedControlID="txtBoxEmail" />
                 <asp:TextBox runat="server" ID="txtBoxEmail" CssClass="form-control"
                     placeholder="nombre@ejemplo.com" MaxLength="100" />
                 <asp:RequiredFieldValidator ErrorMessage="El email es obligatorio."
@@ -30,7 +30,7 @@
 
             <!-- TextBox de contrasena con sus validaciones en el front -->
             <div class="mb-3">
-                <asp:Label runat="server" CssClass="form-label" Text="Contraseña" />
+                <asp:Label runat="server" CssClass="form-label" Text="Contraseña" AssociatedControlID="txtBoxContrasena" />
                 <asp:TextBox runat="server" ID="txtBoxContrasena" CssClass="form-control"
                     TextMode="Password" placeholder="••••••••" MaxLength="20" />
                 <asp:RequiredFieldValidator ErrorMessage="La contraseña es obligatoria."
@@ -40,7 +40,7 @@
 
             <!-- TextBox de confrimar contrasena con sus validaciones en el front -->
             <div class="mb-4">
-                <asp:Label runat="server" CssClass="form-label" Text="Confirmá tu contraseña" />
+                <asp:Label runat="server" CssClass="form-label" Text="Confirmá tu contraseña" AssociatedControlID="txtBoxconfirmarContrasena" />
                 <asp:TextBox runat="server" ID="txtBoxconfirmarContrasena" CssClass="form-control"
                     TextMode="Password" placeholder="••••••••" MaxLength="20" />
                 <asp:RequiredFieldValidator ErrorMessage="Confirmá tu contraseña."

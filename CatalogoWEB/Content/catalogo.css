@@ -676,6 +676,8 @@ input[type="file"].form-control { padding: 0.6rem 0.9rem; font-size: 14px; }
     font-weight: 500;
     color: var(--text-primary);
     cursor: pointer;
+    /* Que el ancho siga a la opcion elegida (no a la mas larga), asi la flecha queda pegada al texto */
+    field-sizing: content;
 }
 .plp-sort-select:hover { color: var(--text-secondary); }
 .plp-sort > i {
@@ -1791,6 +1793,12 @@ input[type="file"].form-control { padding: 0.6rem 0.9rem; font-size: 14px; }
 }
 
 @media (max-width: 575px) {
+    /* Barra superior: los tres nombres en una linea completa y la sesion debajo
+       (si no, el tercer nombre pasaba a otra linea empezando con el punto separador) */
+    .topbar-inner { flex-wrap: wrap; row-gap: 0.15rem; padding-top: 0.45rem; padding-bottom: 0.45rem; }
+    .topbar-sign { width: 100%; flex-wrap: nowrap; }
+    .topbar-links { margin-left: auto; }
+
     .page-title,
     .pdp-title,
     .auth-title { font-size: 24px; }

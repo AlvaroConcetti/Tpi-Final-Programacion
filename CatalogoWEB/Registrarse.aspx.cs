@@ -32,31 +32,31 @@ namespace CatalogoWEB
 
                 if (Validacion.ValidarVacio(txtBoxEmail) || Validacion.ValidarVacio(txtBoxContrasena) || Validacion.ValidarVacio(txtBoxconfirmarContrasena))
                 {
-                    lblMensajeValidacion.Text = "Debes completar todos los campos para poder registrarte.";
+                    lblMensajeValidacion.Text = "Completá todos los campos para registrarte.";
                     return;
                 }
 
                 if (Validacion.ValidarMaxLength(txtBoxEmail.Text, 100))
                 {
-                    lblMensajeValidacion.Text = "El maximo de caracteres para el email son 100.";
+                    lblMensajeValidacion.Text = "El email puede tener hasta 100 caracteres.";
                     return;
                 }
 
                 if (Validacion.ValidarMaxLength(txtBoxContrasena.Text, 20))
                 {
-                    lblMensajeValidacion.Text = "El maximo de caracteres para la contraseña son 20.";
+                    lblMensajeValidacion.Text = "La contraseña puede tener hasta 20 caracteres.";
                     return;
                 }
 
                 if (Validacion.ValidarMaxLength(txtBoxconfirmarContrasena.Text, 20))
                 {
-                    lblMensajeValidacion.Text = "El maximo de caracteres para la contraseña son 20.";
+                    lblMensajeValidacion.Text = "La contraseña puede tener hasta 20 caracteres.";
                     return;
                 }
 
                 if (consultas.VerificarEmailExiste(txtBoxEmail.Text))
                 {
-                    lblMensajeValidacion.Text = "El email ya esta registrado. Intente con otro.";
+                    lblMensajeValidacion.Text = "El email ya está registrado. Probá con otro.";
                     return;
                 }
 

@@ -310,7 +310,7 @@ namespace CatalogoWEB
                 ddlCriterio.Items.Add("Contiene");
 
                 ddlCriterio.Enabled = false;
-                lblTxtBoxFiltrarAvanzado.Text = "Categoria";
+                lblTxtBoxFiltrarAvanzado.Text = "Categoría";
             }
             else
             {

@@ -20,7 +20,7 @@ namespace CatalogoWEB
             // Barrera de seguridad para que se vean favoritos sin login.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                lblParrafo.Text = "Inicie sesion para que pueda ver sus favoritos.";
+                lblParrafo.Text = "Iniciá sesión para ver tus favoritos.";
                 return;
             }
 

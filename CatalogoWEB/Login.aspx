@@ -15,7 +15,7 @@
 
             <!-- TextBox de correo electronico con sus validaciones en el front -->
             <div class="mb-3">
-                <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" />
+                <asp:Label runat="server" CssClass="form-label" Text="Correo electrónico" AssociatedControlID="txtBoxEmail" />
                 <asp:TextBox runat="server" ID="txtBoxEmail" CssClass="form-control"
                     placeholder="nombre@ejemplo.com" MaxLength="100" />
                 <asp:Label Text="Campo obligatorio. Indicá un email." runat="server"
@@ -32,7 +32,7 @@
 
             <!-- TextBox de contrasena con sus validaciones en el front -->
             <div class="mb-4">
-                <asp:Label runat="server" CssClass="form-label" Text="Contraseña" />
+                <asp:Label runat="server" CssClass="form-label" Text="Contraseña" AssociatedControlID="txtBoxContrasena" />
                 <asp:TextBox runat="server" ID="txtBoxContrasena" CssClass="form-control"
                     TextMode="Password" placeholder="••••••••" MaxLength="20" />
                 <asp:Label Text="La contraseña es obligatoria." runat="server"

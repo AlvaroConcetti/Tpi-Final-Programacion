@@ -198,8 +198,8 @@ namespace CatalogoWEB
             // Barrera de seguridad para que sin login no se pueda agregar al carrito.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para añadir un articulo al carrito.");
-                Response.Redirect("Error.aspx");
+                // Sin sesion: se lo manda a iniciar sesion (antes iba a la pagina de error).
+                Response.Redirect("Login.aspx", false);
                 return;
             }
 
@@ -252,8 +252,7 @@ namespace CatalogoWEB
             // Barrera de seguridad para que sin login no se pueda agregar al carrito (aunque no deberia aparecer, por las dudas).
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para modificar el carrito.");
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Login.aspx", false);
                 return;
             }
 
@@ -288,8 +287,7 @@ namespace CatalogoWEB
         {
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para modificar el carrito.");
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Login.aspx", false);
                 return;
             }
 
@@ -321,8 +319,8 @@ namespace CatalogoWEB
             // Barrera de seguridad para que no deje agregar a favoritos sin login.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para añadir un articulo a Favoritos.");
-                Response.Redirect("Error.aspx");
+                // Sin sesion: se lo manda a iniciar sesion (antes iba a la pagina de error).
+                Response.Redirect("Login.aspx", false);
                 return;
             }
             try

@@ -18,8 +18,7 @@ namespace CatalogoWEB
             // Barrera de seguridad para que no permita ver el historial de compras sin login.
             if (!Seguridad.SesionActiva(Session["Usuario"]))
             {
-                Session.Add("Error", "Debes estar logueado para ver tu historial de compras.");
-                Response.Redirect("Error.aspx", false);
+                Response.Redirect("Login.aspx", false);
                 return;
             }
 

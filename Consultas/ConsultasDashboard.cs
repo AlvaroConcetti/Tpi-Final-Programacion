@@ -167,7 +167,7 @@ namespace Consultas
 
             try
             {
-                datos.setearConsulta("SELECT C.Descripcion AS Categoria, SUM(D.Cantidad * D.PrecioUnitario) AS Total FROM PEDIDOS P INNER JOIN DETALLE_PEDIDOS D ON D.IdPedido = P.Id INNER JOIN ARTICULOS A ON A.Id = D.IdArticulo INNER JOIN CATEGORIAS C ON C.Id = A.IdCategoria WHERE P.Estado = 'Confirmado' AND P.FechaConfirmacion >= @desde AND P.FechaConfirmacion < @hasta GROUP BY C.Descripcion ORDER BY Total DESC");
+                datos.setearConsulta("SELECT ISNULL(C.Descripcion, 'Sin categoría') AS Categoria, SUM(D.Cantidad * D.PrecioUnitario) AS Total FROM PEDIDOS P INNER JOIN DETALLE_PEDIDOS D ON D.IdPedido = P.Id INNER JOIN ARTICULOS A ON A.Id = D.IdArticulo LEFT JOIN CATEGORIAS C ON C.Id = A.IdCategoria WHERE P.Estado = 'Confirmado' AND P.FechaConfirmacion >= @desde AND P.FechaConfirmacion < @hasta GROUP BY ISNULL(C.Descripcion, 'Sin categoría') ORDER BY Total DESC");
                 datos.setearParametro("@desde", desde);
                 datos.setearParametro("@hasta", hasta);
                 datos.ejecutarLectura();
@@ -196,7 +196,7 @@ namespace Consultas
 
             try
             {
-                datos.setearConsulta("SELECT Id, Codigo, Nombre, Stock FROM ARTICULOS WHERE Stock <= @umbral ORDER BY Stock ASC, Nombre");
+                datos.setearConsulta("SELECT Id, Codigo, Nombre, Stock FROM ARTICULOS WHERE Activo = 1 AND Stock <= @umbral ORDER BY Stock ASC, Nombre");
                 datos.setearParametro("@umbral", umbral);
                 datos.ejecutarLectura();
 
@@ -226,7 +226,7 @@ namespace Consultas
 
             try
             {
-                datos.setearConsulta("SELECT TOP (@top) A.Nombre, COUNT(*) AS Cantidad FROM FAVORITOS F INNER JOIN ARTICULOS A ON A.Id = F.IdArticulo GROUP BY A.Nombre ORDER BY Cantidad DESC");
+                datos.setearConsulta("SELECT TOP (@top) A.Nombre, COUNT(*) AS Cantidad FROM FAVORITOS F INNER JOIN ARTICULOS A ON A.Id = F.IdArticulo WHERE A.Activo = 1 GROUP BY A.Nombre ORDER BY Cantidad DESC");
                 datos.setearParametro("@top", cantidad);
                 datos.ejecutarLectura();
 

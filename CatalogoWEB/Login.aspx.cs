@@ -32,33 +32,30 @@ namespace CatalogoWEB
 
                 if (Validacion.ValidarVacio(txtBoxEmail))
                 {
-                    lblMensajeValidacion.Text = "El campo email es obligatorio.";
+                    lblMensajeValidacion.Text = "El email es obligatorio.";
                     return;
                 }
 
                 if (Validacion.ValidarVacio(txtBoxContrasena))
                 {
-                    lblMensajeValidacion.Text = "El campo contraseña es obligatoria.";
+                    lblMensajeValidacion.Text = "La contraseña es obligatoria.";
                     return;
                 }
 
                 if (Validacion.ValidarMaxLength(txtBoxEmail.Text, 100))
                 {
-                    lblMensajeValidacion.Text = "El maximo de caracteres para el email son 100.";
+                    lblMensajeValidacion.Text = "El email puede tener hasta 100 caracteres.";
                     return;
                 }
 
                 if (Validacion.ValidarMaxLength(txtBoxContrasena.Text, 20))
                 {
-                    lblMensajeValidacion.Text = "El maximo de caracteres para la contraseña es 20.";
+                    lblMensajeValidacion.Text = "La contraseña puede tener hasta 20 caracteres.";
                     return;
                 }
 
-                if (Validacion.ValidarMinLength(txtBoxContrasena.Text, 6))
-                {
-                    lblMensajeValidacion.Text = "Por favor, ingrese una contraseña con minimo 6 caracteres";
-                    return;
-                }
+                // El minimo de 6 caracteres (y mayuscula/numero) se exige al registrarse y al cambiar la contraseña.
+                // En el login no: si no, las cuentas creadas antes de esa regla (ej. admin@admin.com) no podrian entrar.
 
                 usuario.Email = txtBoxEmail.Text;
                 usuario.Contrasena = txtBoxContrasena.Text;
